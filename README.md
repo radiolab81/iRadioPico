@@ -1,4 +1,4 @@
-# iRadioPico für Raspberry Pico / Pico W (rp2040)
+# iRadioPico für Raspberry Pico / Pico W (RP2040)
 
 Ein Softwarebaukasten für den Aufbau neuer Radios oder Umbau alter Radios zu einem Internetradio mit Raspberry Pico und Pico W auf Arduino Basis.
 
