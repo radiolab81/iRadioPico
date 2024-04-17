@@ -84,7 +84,6 @@ wifi.txt (mit gleichem Inhalt wie wpa_supplicant.conf des iRadio für Raspberry)
 
 #### Senderliste
 
-In der playlist.m3u darf pro Zeile nur die URL einer Internetradiostation stehen. Keine M3U-Metadaten oder verschachtelte Playlisten verwenden!
-Standardmäßig werden Internetradiostreams in den Formaten MP3, AAC, M4A, WAV akzeptiert. Eine Demo-Playlist mit Internetradiosender liegt bereits im /data Verzeichnis von iRadioPico vor.
+In der playlist.m3u darf pro Zeile nur die URL einer Internetradiostation stehen. Keine M3U-Metadaten oder verschachtelte Playlisten verwenden! Eine Demo-Playlist mit Internetradiosender liegt bereits im /data Verzeichnis von iRadioPico vor.
 
 
