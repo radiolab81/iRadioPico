@@ -55,7 +55,7 @@ Standardmäßig ist die Audioausgabe zur Zeit über den weitverbreiteten und pre
 
 Die Entwicklung auf dem Gebiet der Softwarecodecs ist im Moment sehr dynamisch, speziell für den RP2040, deshalb haben wir uns noch nicht für **den einen** Lieblingscodec entschieden! Spielen Sie selbst mal ein bisschen damit herum!
 
-Da der Pico mit seinem PIO-System sehr gut Schnittstellen und DACs darstellen kann (fast so gut wie mancher FPGA), ist das iRadioPico, neben der Codec-Entwicklung/Anpassung, auch eine tolle Spielwiese für eigene Experimente in dieser Richtungen. ->
+Da der Pico mit seinem PIO-System sehr gut Schnittstellen und DACs darstellen kann (fast so gut wie mancher FPGA), ist das iRadioPico, neben der Codec-Entwicklung/Anpassung, auch eine tolle Spielwiese für eigene Experimente in diese Richtungen. ->
 
 https://github.com/malacalypse/rp2040_i2s_example 
 
@@ -64,7 +64,7 @@ https://www.elektronik-labor.de/Raspberry/Pico13.html
 
 ## Installation:
 
-Installieren Sie die Arduino-IDE für Ihr Betriebssystem. Sie erhalten die Arduino-Entwicklungsumgebung entweder aus dem Paketsystem der jeweils verwendeten Linux-Distribution oder über https://www.arduino.cc/en/software .
+Installieren Sie die Arduino-IDE für Ihr Betriebssystem. Sie erhalten die Arduino-Entwicklungsumgebung entweder aus dem Paketsystem der verwendeten Linux-Distribution oder über https://www.arduino.cc/en/software .
 
 Installieren Sie danach den RP2040-Core für den Raspberry Pico wie hier https://github.com/earlephilhower/arduino-pico oder hier https://github.com/bm45/arduino-pico beschrieben.
 
@@ -75,16 +75,16 @@ Nach dem Laden der iRadioPico.ino sollten Sie dann eine erste Version des iRadio
 
 ## WiFi-Zugangsdaten und Senderliste:
 
-Die Zugangsdaten (wifi.txt) und die Senderliste (playlist.m3u) können wahlweise im Rootverzeichnis einer SD-Karte (bei angeschlossenem SD-Kartenlesermodul) oder in einem kleines Dateisystem im RP2040 (LittleFS) abgelegt werden. Informationen zu LittleFS und wie Daten darauf hochgeladen werden finden Sie hier [https://arduino-pico.readthedocs.io/en/latest/fs.html](https://arduino-pico.readthedocs.io/en/latest/fs.html#uploading-files-to-the-littlefs-file-system)  
+Die Zugangsdaten (wifi.txt) und die Senderliste (playlist.m3u) können wahlweise im Rootverzeichnis einer SD-Karte (bei angeschlossenem SD-Kartenlesermodul) oder in einem kleines Dateisystem im RP2040 selbst (LittleFS) abgelegt werden. Informationen zu LittleFS und wie Daten darauf hochgeladen werden finden Sie hier [https://arduino-pico.readthedocs.io/en/latest/fs.html](https://arduino-pico.readthedocs.io/en/latest/fs.html#uploading-files-to-the-littlefs-file-system)  
 Benutzen Sie dafür am Besten die Arduinoerweiterung **PicoLittleFS**, welche auch im iRadioPico Repo zu finden ist.
 
 #### WiFi 
 
-wifi.txt (mit gleichem Inhalt wie wpa_supplicant.conf des iRadio für Raspberry) liegt als Schablone bereits im /data Verzeichnis von iRadioPico
+wifi.txt (mit gleichem Inhalt wie wpa_supplicant.conf des iRadio für Raspberry) liegt als Schablone bereits im /data Verzeichnis von iRadioPico vor.
 
 #### Senderliste
 
 In der playlist.m3u darf pro Zeile nur die URL einer Internetradiostation stehen. Keine M3U-Metadaten oder verschachtelte Playlisten verwenden!
-Standardmäßig werden Internetradiostreams in den Formaten MP3, AAC, M4A, WAV akzeptiert. Eine Demo-Playlist mit Internetradiosender liegt bereits im /data Verzeichnis von iRadioPico
+Standardmäßig werden Internetradiostreams in den Formaten MP3, AAC, M4A, WAV akzeptiert. Eine Demo-Playlist mit Internetradiosender liegt bereits im /data Verzeichnis von iRadioPico vor.
 
 
