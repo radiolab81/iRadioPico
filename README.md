@@ -51,7 +51,7 @@ Das besonderes Highlight, die Simulation photorealistischer Nachbildungen von Se
 
 ## Unterstützte Audio-DACs:
 
-Standardmäßig ist die Audioausgabe zur Zeit über den weitverbreiteten und preiswerten VS1053 Hardwaredekoder/DSP vorgesehen, der Player ist jedoch für zahlreiche Softwarecodec und I2S-DACs (Hardware/Software) offen. Tests mit den "AudioTools" von Phil Schatzmann https://www.pschatzmann.ch/home/2023/02/28/arduino-audiotools-esp32-vs-rp2040-pico-w/ wie auch einer angepassten Version der ESP8266AudioLib von Earle F. Philhower https://github.com/earlephilhower/ESP8266Audio verliefen sehr erfolgreich! Auch unser eigener, aber nicht mehr weiterentwickelter, Codecpack lief ohne Übertaktung der MCU bei 133 MHz bei MP3/AAC und hohen Bitraten bereits ohne Aussetzer! 
+Standardmäßig ist die Audioausgabe zur Zeit über den weitverbreiteten und preiswerten VS1053 Hardwaredekoder/DSP vorgesehen, der Player ist jedoch für zahlreiche Softwarecodec und I2S-DACs (Hardware/Software) offen. Tests mit den "AudioTools" von Phil Schatzmann https://www.pschatzmann.ch/home/2023/02/28/arduino-audiotools-esp32-vs-rp2040-pico-w/ wie auch einer angepassten Version der ESP8266AudioLib von Earle F. Philhower https://github.com/earlephilhower/ESP8266Audio verliefen sehr erfolgreich! Auch unser eigener, aber nicht mehr weiterentwickelter, Codecpack lief ohne Übertaktung der MCU mit 133 MHz bei MP3/AAC und hohen Bitraten bereits ohne Aussetzer! 
 
 Die Entwicklung auf dem Gebiet der Softwarecodecs ist im Moment sehr dynamisch, speziell für den RP2040, deshalb haben wir uns noch nicht für **den einen** Lieblingscodec entschieden! Spielen Sie selbst mal ein bisschen damit herum!
 
