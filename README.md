@@ -43,7 +43,7 @@ Democode vorhanden für:
 
 ![arduinogfx](https://github.com/BM45/iRadioPico/blob/main/pics4www/st7735.jpg)
 
-  Durch die Einbettung des iRadioPico ins Arduino-Ökosystems stehen viele weitere Bibliothek zur Ansteuerung von Displays zur Verfügung
+  Durch die Einbettung des iRadioPico ins Arduino-Ökosystems stehen viele weitere Bibliotheken zur Ansteuerung von Displays zur Verfügung
 
 Das besonderes Highlight, die Simulation photorealistischer Nachbildungen von Senderskalen alter Radios, ist auch beim iRadioPico vertreten.
 
