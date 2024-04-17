@@ -16,6 +16,10 @@ Das iRadioPico wurde primär für Raspberry Pico und Pico W (die Wifi-Variante) 
 
 unterstützt aber auch die vielen anderen Nachbauten und Boards mit der RP2040 MCU.
 
+Die Netzwerkanbindung des iRadioPico erfolgt bei den W (wireless)-Varianten der MCU wahlweise über WiFi oder einem zusätzlichen Ethernetmodul. Bei den WiFi-losen Varianten unterstützen wird die Netzwerkanbindung direct über ein ENC28J60, W5100 oder W5500 Ethernetmodul.
+
+![eth](https://github.com/BM45/iRadioPico/blob/main/pics4www/ethboards.jpg)
+
 ## Steuerung des iRadioPico durch:
 
 Programmumschaltung zum Beispiel mit (Micro-)Taster, Inkrementaldrehgeber, Drehimpulsgeber oder Gestenerkennung. Weitere Steuerungsszenarios sind denkbar.
@@ -47,9 +51,40 @@ Das besonderes Highlight, die Simulation photorealistischer Nachbildungen von Se
 
 ## Unterstützte Audio-DACs:
 
-Standardmäßig ist zur Zeit die Ausgabe über den VS1053 Dekoder DSP vorgesehen, der Player ist jedoch für zahlreiche Softwarecodec und I2S-DACs (Hardware/Software) offen.
-Tests mit den "AudioTools" von Phil Schatzmann https://www.pschatzmann.ch/home/2023/02/28/arduino-audiotools-esp32-vs-rp2040-pico-w/ wie auch einer angepassten Version der ESP8266AudioLib von Earle F. Philhower https://github.com/earlephilhower/ESP8266Audio verliefen sehr erfolgreich! 
-Die Entwicklung auf dem Gebiet der Softwarecodec ist im Moment sehr dynamisch, speziell für den RP2040, deshalb haben wir uns noch nicht für den einen Lieblingscodec entschieden! Da der Pico mit seinem PIO-System sehr gut solche Schnittstellen und DACs darstellen kann, ist das iRadioPico eine tolle Spielwiese für eigenen Experimente in diese Richtungen. 
+Standardmäßig ist die Audioausgabe zur Zeit über den weitverbreiteten und preiswerten VS1053 Hardwaredekoder/DSP vorgesehen, der Player ist jedoch für zahlreiche Softwarecodec und I2S-DACs (Hardware/Software) offen. Tests mit den "AudioTools" von Phil Schatzmann https://www.pschatzmann.ch/home/2023/02/28/arduino-audiotools-esp32-vs-rp2040-pico-w/ wie auch einer angepassten Version der ESP8266AudioLib von Earle F. Philhower https://github.com/earlephilhower/ESP8266Audio verliefen sehr erfolgreich! Auch unser eigener, aber nicht mehr weiterentwickelter, Codecpack lief ohne Übertaktung der MCU bei 133 MHz bei MP3/AAC und hohen Bitraten bereits ohne Aussetzer! 
+
+Die Entwicklung auf dem Gebiet der Softwarecodecs ist im Moment sehr dynamisch, speziell für den RP2040, deshalb haben wir uns noch nicht für **den einen** Lieblingscodec entschieden! Spielen Sie selbst mal ein bisschen damit herum!
+
+Da der Pico mit seinem PIO-System sehr gut Schnittstellen und DACs darstellen kann (fast so gut wie mancher FPGA), ist das iRadioPico, neben der Codec-Entwicklung/Anpassung, auch eine tolle Spielwiese für eigene Experimente in dieser Richtungen. ->
 
 https://github.com/malacalypse/rp2040_i2s_example 
+
 https://www.elektronik-labor.de/Raspberry/Pico13.html
+
+
+## Installation:
+
+Installieren Sie die Arduino-IDE für Ihr Betriebssystem. Sie erhalten die Arduino-Entwicklungsumgebung entweder aus dem Paketsystem der jeweils verwendeten Linux-Distribution oder über https://www.arduino.cc/en/software .
+
+Installieren Sie danach den RP2040-Core für den Raspberry Pico wie hier https://github.com/earlephilhower/arduino-pico oder hier https://github.com/bm45/arduino-pico beschrieben.
+
+Installieren Sie dann über die Bibliotheksverwaltung der Arduino-Entwicklungsumgebung noch die Adafruit_VS1053 Bibliothek. Weitere Bestandteile des iRadioPico erfordern ggf. zusätzliche LIBs, wie die Arduino_GFX, U8G2 oder LiquidCrystal_PCF8574. 
+
+Nach dem Laden der iRadioPico.ino sollten Sie dann eine erste Version des iRadioPico bauen können. Weitere Einstellungen wie den Netzwerkadapter und die Wahl des Dekoders (mit Anschlussbelegung) nehmen Sie in der globals.h vor.  Die Vergabe der Anschlusspins für gpiod, displayd ,... erfolgt in den Modulen selbst. Vermeiden Sie GPIO-Konflikte!
+
+
+## WiFi-Zugangsdaten und Senderliste:
+
+Die Zugangsdaten (wifi.txt) und die Senderliste (playlist.m3u) können wahlweise im Rootverzeichnis einer SD-Karte (bei angeschlossenem SD-Kartenlesermodul) oder in einem kleines Dateisystem im RP2040 (LittleFS) abgelegt werden. Informationen zu LittleFS und wie Daten darauf hochgeladen werden finden Sie hier [https://arduino-pico.readthedocs.io/en/latest/fs.html](https://arduino-pico.readthedocs.io/en/latest/fs.html#uploading-files-to-the-littlefs-file-system)  
+Benutzen Sie dafür am Besten die Arduinoerweiterung **PicoLittleFS**, welche auch im iRadioPico Repo zu finden ist.
+
+#### WiFi 
+
+wifi.txt (mit gleichem Inhalt wie wpa_supplicant.conf des iRadio für Raspberry) liegt als Schablone bereits im /data Verzeichnis von iRadioPico
+
+#### Senderliste
+
+In der playlist.m3u darf pro Zeile nur die URL einer Internetradiostation stehen. Keine M3U-Metadaten oder verschachtelte Playlisten verwenden!
+Standardmäßig werden Internetradiostreams in den Formaten MP3, AAC, M4A, WAV akzeptiert. Eine Demo-Playlist mit Internetradiosender liegt bereits im /data Verzeichnis von iRadioPico
+
+
