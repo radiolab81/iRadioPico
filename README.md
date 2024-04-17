@@ -16,7 +16,7 @@ Das iRadioPico wurde primär für Raspberry Pico und Pico W (die Wifi-Variante) 
 
 unterstützt aber auch die vielen anderen Nachbauten und Boards mit der RP2040 MCU.
 
-Die Netzwerkanbindung des iRadioPico erfolgt bei den W (wireless)-Varianten der MCU wahlweise über WiFi oder einem zusätzlichen Ethernetmodul. Bei den WiFi-losen Varianten unterstützen wird die Netzwerkanbindung direct über ein ENC28J60, W5100 oder W5500 Ethernetmodul.
+Die Netzwerkanbindung des iRadioPico erfolgt bei den W (wireless)-Varianten der MCU wahlweise über WiFi oder einem zusätzlichen Ethernetmodul. Bei den WiFi-losen Varianten unterstützen wir die Netzwerkanbindung direkt über ein ENC28J60, W5100 oder W5500 Ethernetmodul.
 
 ![eth](https://github.com/BM45/iRadioPico/blob/main/pics4www/ethboards.jpg)
 
