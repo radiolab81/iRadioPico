@@ -114,6 +114,16 @@ Die Funktionen loop() und loop1() sind Dauerschleifen, die nach den jeweiligen s
 Im Gegensatz zum iRadio SoC (Linux-basiert), iRadioMini (FreeRTOS), gibt es beim iRadioPico gar kein hinterläufiges Betriebssystem! Alle Prozesse werden sequenziell abgearbeitet, bitte vermeiden Sie daher in eigenen Modulen blockierende Anweisungen (delay,...) wo es nur geht und verwenden Sie stattdessen lieber Zeitmessungen nach dem millis()-Prinzip (siehe Beispielcodes). **Netzwerk-relevante Sachen (Ethernet, WiFi) können nur auf Core0 laufen!** Wir haben das iRadioPico deshalb so aufgebaut, das das netzwerkbasierte Internetradio auf Core0 läuft und grafische Sachen (displayd) wie Skalensimulationen dem Core1 vorbehalten bleiben.
 
 
+Das iRadioPico ist mit seinem Beispielcode so aufgebaut, dass es problemlos und reaktionsfreudig bereits in der Standard-Codeoptimierung (Option -O) der Arduino IDE und bei 133 MHz Systemtakt läuft. Auch bisher benutzte Softwarecodecs ließen sich in der Regel problemlos so betreiben. Bei eigenen Entwicklungen sollte das die Vorgabe sein. Sollte Ihr Code jedoch etwas mehr Leistung benötigen, können Sie zunächst höhere Optimierungsstufen ausprobieren.
+
+
+![buildopts](https://github.com/BM45/iRadioPico/blob/main/pics4www/build_optis.jpg)
+
+
+Die RP2040 MCU gilt als leicht und problemlos übertaktbar, sollten Sie besonders komplexe und rechenintensive Sachen auf dem iRadioPico vorhaben, lässt sich der Prozessor auch direkt über die Arduino-Entwicklungsumgebung hochtakten.
+
+![overclk](https://github.com/BM45/iRadioPico/blob/main/pics4www/overclockmcu.jpg)
+
 
 
 
