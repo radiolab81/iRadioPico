@@ -38,7 +38,7 @@ Es werden folgende Gesten erkannt:
     Hand vor Sensor gegen Uhrzeigersinn
     Wellenförmige Bewegung vor dem Sensor
 
-Die Erkennungsreichweite des Sensors beträgt zwischen 5 und 20 cm, hinter Skalenglas oder abgedunkelter Rauchglasskale wird die Reichweite etwas gedämpft. Die Erkennung erfolgt mittels IR-Licht und einem Sensorarray (ähnlich einer kleinen Kamera). 
+Die Erkennungsreichweite des Sensors beträgt zwischen 5 und 20 cm, hinter Skalenglas oder abgedunkelter Rauchglasskale wird die Reichweite etwas gedämpft. Die Erkennung erfolgt mittels IR-Licht und einem Sensorarray (ähnlich einer kleinen Kamera) und der Nutzer sollte die korrekte Ausführung der Gesten etwas "erlernen". Hier ein kurzes Demovideo https://youtube.com/shorts/Qq4KsmVGSnA 
 
 Weitere Steuerungsszenarios sind denkbar und leicht umsetzbar.
 
