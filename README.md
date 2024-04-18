@@ -22,9 +22,9 @@ Die Netzwerkanbindung des iRadioPico erfolgt bei den W (wireless)-Varianten der 
 
 ## Steuerung des iRadioPico durch:
 
-Programmumschaltung zum Beispiel mit (Micro-)Taster, Inkrementaldrehgeber, Drehimpulsgeber oder Gestenerkennung. Weitere Steuerungsszenarios sind denkbar.
+Programmumschaltung zum Beispiel mit (Micro-)Taster, Inkrementaldrehgeber/ Drehimpulsgeber oder Gestenerkennung (PAJ7620U2-Sensor). Weitere Steuerungsszenarios sind denkbar und leicht umsetzbar.
 
-Diese Steuerung wird wie in den anderen iRadio Baukästen als "gpiod" Daemon/Prozess bezeichnet.
+Diese Steuerung zur Programmumschaltung, Lautstärkenänderung usw. wird wie in den anderen iRadio Baukästen als "gpiod" Daemon/Prozess bezeichnet.
 
 ## Unterstützte Displays für Nutzerschnittstelle (displayd):
 Democode vorhanden für:
