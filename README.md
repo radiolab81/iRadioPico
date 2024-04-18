@@ -104,4 +104,14 @@ wifi.txt (mit gleichem Inhalt wie wpa_supplicant.conf des iRadio für Raspberry)
 
 In der playlist.m3u darf pro Zeile nur die URL einer Internetradiostation stehen. Keine M3U-Metadaten oder verschachtelte Playlisten verwenden! Eine Demo-Playlist mit Internetradiosendern liegt bereits im /data Verzeichnis von iRadioPico vor.
 
+## Modulanpassungen im System:
+
+Nachdem Sie das passende Bedienkonzept für Ihr Internetradio festgelegt haben, können die benötigten Module (gpiod, displayd ,...) in der Hauptdatei des Projekts, der iRadioPico.ino, gestartet werden. Da der RP2040 eine Dualcore-MCU ist, gibt es die Möglichkeit die Arbeit auf beide Prozessorkerne (Core0 und Core1) aufzuteilen. Dazu sind in der Datei iRadioPico.ino die Methoden setup() und setup1(), sowie loop() und loop1() vorhanden.  Die setup-Methoden stellen eine Art Startdatei (vergleichbar der rc.local unter dem iRadio für Raspberry SoC) dar, die einmalig nach dem Kaltstart des Systems aufgerufen werden. setup() ist dabei für die Initialisierung und das Starten der Dienste auf Prozessorkern 0 verantwortlich, setup1 für den Prozessorkern 1. 
+Die Funktionen loop() und loop1() sind Dauerschleifen, die nach den jeweiligen setup's, bis zur Trennung der Spannungsversorgung durchlaufen werden. Hier erfolgt die eigentliche Datenverarbeitung , getrennt nach Core0 und Core1. Im Gegensatz zum iRadio SoC (Linux-basiert), iRadioMini (FreeRTOS), gibt es beim iRadioPico gar kein hinterläufiges Betriebssystem! Alle Prozesse werden sequenziell abgearbeitet, bitte vermeiden Sie daher in eigenen Modulen blockierende Anweisungen (delay,...) wo es nur geht und verwenden Sie stattdessen lieber Zeitmessungen nach dem millis()-Prinzip (siehe Beispielcodes). **Netzwerk-relevante Sachen (Ethernet, WiFi) können nur auf Core0 laufen!** Wir haben das iRadioPico deshalb so aufgebaut, das das Internetradio auf Core0 läuft und grafische Sachen (displayd) wie Skalensimulationen dem Core1 vorbehalten bleiben.
+
+
+
+
+
+
 
