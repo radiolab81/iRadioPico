@@ -82,10 +82,10 @@ void setup() {
   // NETWORK HARDWARE init
   #ifdef USE_ETHERNET
     // Set up SPI pinout to match your HW
-    SPI.setRX(0);
-    SPI.setCS(1);
-    SPI.setSCK(2);
-    SPI.setTX(3);
+    SPI.setRX(SPI_PIN_RX);
+    SPI.setCS(SPI_PIN_CS);
+    SPI.setSCK(SPI_PIN_SCK);
+    SPI.setTX(SPI_PIN_TX);
 
     // see https://arduino-pico.readthedocs.io/_/downloads/en/latest/pdf/  Chapter: ETHERNETLWIP (WIRED ETHERNET) SUPPORT 
     eth.setSPISpeed(30000000);
