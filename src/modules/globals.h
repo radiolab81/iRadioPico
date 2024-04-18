@@ -11,6 +11,13 @@
 //#define USE_W5100
 //#define USE_W5500
 
+#ifdef USE_ETHERNET
+    #define SPI_PIN_RX  0
+    #define SPI_PIN_CS  1
+    #define SPI_PIN_SCK 2
+    #define SPI_PIN_TX  3
+#endif
+
 #define USE_WIFI
 
 
