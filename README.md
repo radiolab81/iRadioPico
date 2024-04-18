@@ -22,7 +22,25 @@ Die Netzwerkanbindung des iRadioPico erfolgt bei den W (wireless)-Varianten der 
 
 ## Steuerung des iRadioPico durch:
 
-Programmumschaltung zum Beispiel mit (Micro-)Taster, Inkrementaldrehgeber/ Drehimpulsgeber oder Gestenerkennung (PAJ7620U2-Sensor). Weitere Steuerungsszenarios sind denkbar und leicht umsetzbar.
+Programmumschaltung zum Beispiel mit (Micro-)Taster, Inkrementaldrehgeber/ Drehimpulsgeber oder Gestenerkennung (PAJ7620U2-Sensor) wodurch auch die berührungslose Bedienung
+ermöglicht wird.
+
+Mit dem PAJ7620U2-Sensor versteht das iRadioPico verschiedene Gesten und kann darauf mit bestimmten Aktionen (Programmumschaltung, Lautstärkeänderung, An/Aus, ...) reagieren. 
+Es werden folgende Gesten erkannt:
+
+    Hand nach links
+    Hand nach rechts
+    Hand nach oben
+    Hand nach unten
+    Hand auf Sensor zubewegen
+    Hand von Sensor wegbewegen
+    Hand vor Sensor im Uhrzeigersinn
+    Hand vor Sensor gegen Uhrzeigersinn
+    Wellenförmige Bewegung vor dem Sensor
+
+Die Erkennungsreichweite des Sensors beträgt zwischen 5 und 20 cm, hinter Skalenglas oder abgedunkelter Rauchglasskale wird die Reichweite etwas gedämpft. Die Erkennung erfolgt mittels IR-Licht und einem Sensorarray (ähnlich einer kleinen Kamera). 
+
+Weitere Steuerungsszenarios sind denkbar und leicht umsetzbar.
 
 Diese Steuerung zur Programmumschaltung, Lautstärkenänderung usw. wird wie in den anderen iRadio Baukästen als "gpiod" Daemon/Prozess bezeichnet.
 
