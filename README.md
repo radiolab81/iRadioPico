@@ -124,7 +124,7 @@ Die RP2040 MCU gilt als leicht und problemlos übertaktbar, sollten Sie besonder
 
 ![overclk](https://github.com/BM45/iRadioPico/blob/main/pics4www/overclockmcu.jpg)
 
-
+Die dabei eingestellte Taktfrequenz gilt für beide MCU-Kerne!
 
 
 
