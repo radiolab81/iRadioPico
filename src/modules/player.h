@@ -14,6 +14,7 @@ struct PlayerInfo {
 void player_init();
 void player_run();
 
+void goto_station(int);
 void next_station();
 void prev_station();
 void pause_player();
