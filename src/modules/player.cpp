@@ -129,11 +129,11 @@ void player_init() {
    
    #ifdef USE_VS1053_DECODER
 		
-	    if (! VS1053Dekoder.begin())
+	if (! VS1053Dekoder.begin())
     	  { // initialisiere VS1053-Dekoder
      		SERIAL_PORT.println("PLAYER: no VS1053-DSP detected");
      		while (1) delay(1000);
-  		  }			
+  	  }			
 
    	   SERIAL_PORT.println("PLAYER: VS1053-DSP found");
 	   VS1053Dekoder.setVolume(7, 7);
@@ -160,13 +160,13 @@ void player() {
     	float fuellstand = (queue.count() / BUF_SIZE) * 99;
     	//SERIAL_PORT.println(fuellstand);
             
-  		if (VS1053Dekoder.readyForData()) {
+  	    if (VS1053Dekoder.readyForData()) {
    	      if (!queue.isEmpty()) {
      		Buffer32Byte *decoded_audio = queue.pop();
      		VS1053Dekoder.playData(decoded_audio->data, 32);
      		delete(decoded_audio);
-     	  } 
-   		} 
+     	      } 
+   	    } 
   			 
   	#endif
   	
@@ -180,17 +180,17 @@ void player() {
 void playerFillBufferTask()
 {
   #ifdef USE_VS1053_DECODER
-  	if (state == RUNNING) {
-  		if (stream!=NULL) {
+      if (state == RUNNING) {
+  	if (stream!=NULL) {
       	  if (stream->available() > 32) {
-       		if (!queue.isFull()) {
-          	  Buffer32Byte *decoded_audio = new Buffer32Byte();
+       	    if (!queue.isFull()) {
+              Buffer32Byte *decoded_audio = new Buffer32Byte();
               stream->read(decoded_audio->data, 32);
               queue.push(decoded_audio);
-        	}
+            }
       	  }	 
     	} 
-  	}
+      }
   #endif
   
   #ifdef USE_INTERNAL_CODEC_WITH_CUSTOM_LIB
@@ -208,10 +208,23 @@ void player_run(){
  player();
 }
 
+void goto_station(int ch){
+  SERIAL_PORT.print("PLAYER: goto_station "); SERIAL_PORT.println(ch);
+  if ((state == RUNNING) || (state == PREPAIRING_FAILED) || (state == PREPARING) ){
+  	if ( (ch >=0) && (ch < channels_in_list ) ) {
+      actual_channel_or_file_ID=ch;
+    
+     terminate_audioplayer_pipeline();
+     create_audioplayer_pipeline(actual_channel_or_file_ID);
+    }
+  }
+}
+
+
 void next_station() {
   SERIAL_PORT.println("PLAYER: next_station");
   if ((state == RUNNING) || (state == PREPAIRING_FAILED) || (state == PREPARING) ){
-  	if (actual_channel_or_file_ID < (channels_in_list-1))
+    if (actual_channel_or_file_ID < (channels_in_list-1))
       actual_channel_or_file_ID++;
     else 
       actual_channel_or_file_ID=0;
