@@ -14,6 +14,7 @@
 #include "src/modules/gpiod_rotary.h"
 #include "src/modules/gpiod_keys.h"
 #include "src/modules/gesture/gpiod_gesture.h"
+#include "src/modules/gpiod_potentiometer.h"
 
 //#include "src/modules/display/I2C_LCD/displayd_i2c_lcd.h"
 #include "src/modules/display/u8g2_ssd1306/displayd_ssd1306.h"
@@ -139,7 +140,7 @@ void setup() {
   gpiod_rotary_init(); 
   //gpiod_keys_init();
   //gpiod_gesture_init(); 
-  
+  //gpiod_potentiometer_init();
 }
 
 
@@ -153,7 +154,7 @@ void loop() {
    gpiod_rotary_run();
    //gpiod_keys_run();
    //gpiod_gesture_run();
-
+   //gpiod_potentiometer_run();
 }
 
 
