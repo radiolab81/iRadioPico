@@ -211,15 +211,14 @@ void player_run(){
 void goto_station(int ch){
   SERIAL_PORT.print("PLAYER: goto_station "); SERIAL_PORT.println(ch);
   if ((state == RUNNING) || (state == PREPAIRING_FAILED) || (state == PREPARING) ){
-  	if ( (ch >=0) && (ch < channels_in_list ) ) {
+    if ( (ch >=0) && (ch < channels_in_list ) ) {
       actual_channel_or_file_ID=ch;
     
-     terminate_audioplayer_pipeline();
-     create_audioplayer_pipeline(actual_channel_or_file_ID);
+      terminate_audioplayer_pipeline();
+      create_audioplayer_pipeline(actual_channel_or_file_ID);
     }
   }
 }
-
 
 void next_station() {
   SERIAL_PORT.println("PLAYER: next_station");
