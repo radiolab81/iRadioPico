@@ -11,7 +11,7 @@ enum _result { NONE, CH_UP, CH_DOWN };
 static unsigned long last_interrupt_time = 0;
 static _result result = NONE;
 
-void isr_encoder_keys() {
+void isr_keys() {
   uint32_t flags = save_and_disable_interrupts();
   //hw_clear_bits(&(iobank0_hw->proc0_irq_ctrl.inte[KEY_.... / 8]), 0b1111 << (KEY_.... % 8 )*4u );
    
@@ -38,8 +38,8 @@ void gpiod_keys_init() {
   // put your setup code here, to run once:
   pinMode(KEY_A_PIN,INPUT_PULLUP);
   pinMode(KEY_B_PIN,INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(KEY_A_PIN), isr_encoder_keys, FALLING);
-  attachInterrupt(digitalPinToInterrupt(KEY_B_PIN), isr_encoder_keys, FALLING);
+  attachInterrupt(digitalPinToInterrupt(KEY_A_PIN), isr_keys, FALLING);
+  attachInterrupt(digitalPinToInterrupt(KEY_B_PIN), isr_keys, FALLING);
 }
 
 void gpiod_keys_run() {
