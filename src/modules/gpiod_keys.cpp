@@ -6,10 +6,10 @@
 
 #define DEBOUNCE_TIME_KEYS 250
 
-enum ENC_result { NONE, CH_UP, CH_DOWN };
+enum _result { NONE, CH_UP, CH_DOWN };
 
 static unsigned long last_interrupt_time = 0;
-static ENC_result result = NONE;
+static _result result = NONE;
 
 void isr_encoder_keys() {
   uint32_t flags = save_and_disable_interrupts();
