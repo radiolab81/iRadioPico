@@ -22,6 +22,7 @@
 //#include "src/modules/display/baby_metz/baby_metz.h"
 //#include "src/modules/display/Arduino_GFX_ILI9341/displayd_ILI9341.h"
 
+//#include "src/modules/httpd.h"
 
 #ifdef USE_ETHERNET
 
@@ -175,7 +176,8 @@ void setup1() {
   //displayd_st7735_init();
   //displayd_baby_metz_init();
   //displayd_ILI9341_init();
-  
+
+  //httpd_init();
 }
 
 //********************************************************************
@@ -189,6 +191,8 @@ void loop1() {
   //displayd_baby_metz_run();
   //displayd_ILI9341_run();
 
+  //httpd_run();
+   
   global_heartbeat_counter++;
   if (global_heartbeat_counter%1330000 == 0)
      task_heartbeat();
