@@ -2,6 +2,7 @@
 #define _PLAYER_H_
 
 enum Player_State { STOPPED,   PREPARING,   RUNNING ,  PAUSED,	PREPAIRING_FAILED };
+enum Player_Event { NO_EVENT, VOLUME_CHANGED };
 
 struct PlayerInfo {           
   unsigned int cur_ch_no;        
@@ -21,6 +22,9 @@ void pause_player();
 void resume_player();
 void stop_player();
 void start_player();
+void volume_up();
+void volume_down();
+
 
 PlayerInfo getPlayerInfo(void);
 
