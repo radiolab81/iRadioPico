@@ -17,6 +17,7 @@
 	WiFiClient *stream = NULL;
 	
 	uint8_t volume_L = 10, volume_R = 10;
+	uint16_t pcm_value_left, pcm_value_right;
 	
 #endif
 
@@ -168,7 +169,7 @@ void player() {
      		Buffer32Byte *decoded_audio = queue.pop();
      		VS1053Dekoder.playData(decoded_audio->data, 32);
      		delete(decoded_audio);
-  		} 
+  	      } 
    	    } 
   			 
   	#endif
@@ -209,9 +210,19 @@ void player_run(){
           SERIAL_PORT.println("PLAYER: VOLUME_CHANGED event (att in 0.5 dB steps) L/R=" + String(volume_L) + "/" + String(volume_R));
           playerEvent = NO_EVENT;
       	  VS1053Dekoder.setVolume(volume_L, volume_R);
-	}
-   
-   	playerFillBufferTask();
+      	}
+      	
+      	#ifdef USE_INTERNAL_VU_METER
+        	// read DAC registers for left channel
+      		VS1053Dekoder.sciWrite(VS1053_REG_WRAMADDR,0xC015);
+      		pcm_value_left = VS1053Dekoder.sciRead(VS1053_REG_WRAM);
+      	
+      		// read DAC registers for right channel
+      		VS1053Dekoder.sciWrite(VS1053_REG_WRAMADDR,0xC016);
+      		pcm_value_right = VS1053Dekoder.sciRead(VS1053_REG_WRAM);
+      	#endif
+	
+        playerFillBufferTask();
      #endif
 	
      player();
@@ -325,9 +336,8 @@ PlayerInfo getPlayerInfo(void) {
      
    info.cur_player_state = state;
    info.cur_HTTP_RESPONSE = http_get_response;
- 
+   info.pcm_value_left = pcm_value_left;
+   info.pcm_value_right = pcm_value_right;
    return info;
 }
-
-
 
