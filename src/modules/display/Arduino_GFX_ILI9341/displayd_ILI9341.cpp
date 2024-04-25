@@ -11,7 +11,7 @@
 #define PIN_MOSI 3
 #define PIN_MISO GFX_NOT_DEFINED
 
-#define FPS 25	// frames per second
+#define FPS 20	// frames per second
 
 static unsigned long last_call_time = 0;
 #define FPS_SYNC_TIME 1000/FPS
@@ -23,6 +23,35 @@ static unsigned int cur_url_scroll_pos = 0;
 static Arduino_DataBus  *bus = NULL;
 static Arduino_GFX		*gfx = NULL;
 static Arduino_GFX      *canvas  = NULL; // use a canvas instead of direct gfx-drawing, to prevent display flickering
+
+#ifdef USE_INTERNAL_VU_METER
+unsigned short linToDBTab[5] = {36781, 41285, 46341, 52016, 58386};
+/*
+Converts a linear 16-bit value between 0..65535 to decibels.
+Reference level: 32768 = 96dB (largest VS1053b number is 32767 = 95dB).
+Bugs:
+- For the input of 0, 0 dB is returned, because minus infinity cannot
+be represented with integers.
+- Assumes a ratio of 2 is 6 dB, when it actually is approx. 6.02 dB.
+see; https://www.vlsi.fi/fileadmin/software/VS10XX/VS1053_VS1063_PcmRecorder.pdf  ,2.4.3 Building a Useful VU Meter
+*/
+unsigned short LinToDB(unsigned short n) {
+	int res = 96, i;
+	if (!n) /* No signal should return minus infinity */
+	  return 0;
+
+	while (n < 32768U) { /* Amplify weak signals */
+	  res -= 6;
+	  n <<= 1;
+	}
+	
+	for (i=0; i<5; i++) /* Find exact scale */
+	  if (n > linToDBTab[i])
+	    res++;
+	    
+	return res;
+}
+#endif
 
 void displayd_ILI9341_init() { 
     SERIAL_PORT.println("DISPLAYD: ILI9341 init");
@@ -106,6 +135,22 @@ void displayd_ILI9341_run() {  /* see great Arduino_GFX lib doc for all graphic 
 		  	  cur_url_scroll_pos=0;
 		  
 		    canvas->print(info.cur_url_playing+cur_url_scroll_pos);
+		    
+		    #ifdef USE_INTERNAL_VU_METER
+		    	canvas->setCursor(0,100);
+		    	uint8_t vu_L = (uint8_t) LinToDB(info.pcm_value_left);
+		    	canvas->print("L="); 
+		    	canvas->drawRect(24,  99,  101, 17, WHITE);
+		    	canvas->fillRect(25, 100, vu_L, 15, GREEN);
+		    
+		    	canvas->setCursor(0,120);
+		    	uint8_t vu_R = (uint8_t) LinToDB(info.pcm_value_right);
+		    	canvas->print("R=");
+		    	canvas->drawRect(24, 119,  101, 17, WHITE);
+		    	canvas->fillRect(25, 120, vu_R, 15, GREEN);
+		    
+		    #endif
+		    
 		    canvas->flush();
 
 		}
@@ -113,4 +158,3 @@ void displayd_ILI9341_run() {  /* see great Arduino_GFX lib doc for all graphic 
 	    last_call_time = millis();
 	}	// 	if (millis()-last_call_time > FPS_SYNC_TIME) {
 }
-
