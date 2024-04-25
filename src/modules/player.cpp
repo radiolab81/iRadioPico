@@ -16,6 +16,8 @@
 	HTTPClient http;
 	WiFiClient *stream = NULL;
 	
+	uint8_t volume_L = 10, volume_R = 10;
+	
 #endif
 
 
@@ -37,6 +39,7 @@ QueueArray <Buffer32Byte *> queue(BUF_SIZE); // Puffer für Streaming
 Player_State state = STOPPED;
 int http_get_response = 0;
 
+Player_Event playerEvent = NO_EVENT;
 
 void terminate_audioplayer_pipeline() {
   SERIAL_PORT.println("PLAYER: terminate audio pipeline");
@@ -136,7 +139,7 @@ void player_init() {
   	  }			
 
    	   SERIAL_PORT.println("PLAYER: VS1053-DSP found");
-	   VS1053Dekoder.setVolume(7, 7);
+	   VS1053Dekoder.setVolume(volume_L, volume_R);
 	   
 	   // start with programm no 0
 	   actual_channel_or_file_ID = 0;
@@ -165,7 +168,7 @@ void player() {
      		Buffer32Byte *decoded_audio = queue.pop();
      		VS1053Dekoder.playData(decoded_audio->data, 32);
      		delete(decoded_audio);
-     	      } 
+  		} 
    	    } 
   			 
   	#endif
@@ -179,33 +182,39 @@ void player() {
 
 void playerFillBufferTask()
 {
-  #ifdef USE_VS1053_DECODER
-      if (state == RUNNING) {
-  	if (stream!=NULL) {
-      	  if (stream->available() > 32) {
-       	    if (!queue.isFull()) {
-              Buffer32Byte *decoded_audio = new Buffer32Byte();
-              stream->read(decoded_audio->data, 32);
-              queue.push(decoded_audio);
-            }
-      	  }	 
-    	} 
-      }
-  #endif
+     #ifdef USE_VS1053_DECODER
+	if (state == RUNNING) {
+	  if (stream!=NULL) {
+     	     if (stream->available() > 32) {
+		if (!queue.isFull()) {
+                  Buffer32Byte *decoded_audio = new Buffer32Byte();
+		  stream->read(decoded_audio->data, 32);
+ 		  queue.push(decoded_audio);
+		}
+      	     }	 
+	  } 
+	}
+     #endif
   
-  #ifdef USE_INTERNAL_CODEC_WITH_CUSTOM_LIB
+     #ifdef USE_INTERNAL_CODEC_WITH_CUSTOM_LIB
   
-    // add code for buffer filling here
+    	// add code for buffer filling here
      
-  #endif
+     #endif
 }
 
 void player_run(){
- #ifdef USE_VS1053_DECODER
-   playerFillBufferTask();
- #endif
-
- player();
+     #ifdef USE_VS1053_DECODER
+        if (playerEvent == VOLUME_CHANGED) {
+          SERIAL_PORT.println("PLAYER: VOLUME_CHANGED event (att in 0.5 dB steps) L/R=" + String(volume_L) + "/" + String(volume_R));
+          playerEvent = NO_EVENT;
+      	  VS1053Dekoder.setVolume(volume_L, volume_R);
+	}
+   
+   	playerFillBufferTask();
+     #endif
+	
+     player();
 }
 
 void goto_station(int ch){
@@ -274,6 +283,38 @@ void start_player() {
     create_audioplayer_pipeline(actual_channel_or_file_ID);
   }
 }
+  
+/* for VS1053 see
+9.6.11 SCI_VOL (RW)
+SCI_VOL is a volume control for the player hardware. The most significant byte of the volume
+register controls the left channel volume, the low part controls the right channel volume. The
+channel volume sets the attenuation from the maximum volume level in 0.5 dB steps. Thus,
+maximum volume is 0x0000 and total silence is 0xFEFE. 
+Setting SCI_VOL to 0xFFFF will activate analog powerdown mode. */
+void volume_down() {
+   #ifdef USE_VS1053_DECODER
+ 	if ( volume_L < 250 ) 
+	  volume_L+=5;
+	
+  	if ( volume_R < 250)
+	  volume_R+=5;
+    
+	playerEvent = VOLUME_CHANGED;
+   #endif
+}
+
+void volume_up() {
+   #ifdef USE_VS1053_DECODER
+	if ( volume_L > 5 ) 
+	  volume_L-=5;
+	
+	if ( volume_R > 5 )
+  	  volume_R-=5;
+			
+  	playerEvent = VOLUME_CHANGED;
+   #endif
+}
+
   
 PlayerInfo getPlayerInfo(void) {
    PlayerInfo info;
