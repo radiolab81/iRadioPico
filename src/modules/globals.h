@@ -33,6 +33,7 @@
 #define VS1053_CLK     10   // VS1053 Clock Pin
 #define VS1053_RESET   9   // VS1053 reset pin (-1 unbelegt)
 
+//#define USE_INTERNAL_VU_METER
 
 // set by wifi.txt and playlist.m3u from SDCARD
 #define MAX_CHANNELS_IN_LIST 100
