@@ -30,6 +30,14 @@ void handleRoot() {
       start_player();
     }
     
+    if (server.arg(0).compareTo("Vol+") == 0) {
+      volume_up();
+    }
+    
+    if (server.arg(0).compareTo("Vol-") == 0) {
+      volume_down();
+    }
+    
   } // if ( server.argName(0).compare("command") == 0 ) { 
     
   if ( server.argName(0).compareTo("gotoStation") == 0 ) {
@@ -110,6 +118,8 @@ strcat(HTML,"<form action=\"\" method=\"get\"> \
 <button name=\"command\" type=\"submit\"  value=\"Next\"class=\"button\">Next</button> \
 <button name=\"command\" type=\"submit\"  value=\"Stop\"class=\"button\">Stop</button> \
 <button name=\"command\" type=\"submit\"  value=\"Play\"class=\"button\">Play</button> \
+<button name=\"command\" type=\"submit\"  value=\"Vol-\"class=\"button\">Vol-</button> \
+<button name=\"command\" type=\"submit\"  value=\"Vol+\"class=\"button\">Vol+</button> \
 </form>");
 
 strcat(HTML,"<br> <form action=\"\" method=\"GET\"> <select name=\"gotoStation\" id=\"Stations\" onchange=\"this.form.submit()\" STYLE=\"width: 52%\" size=\"20\" > ");
