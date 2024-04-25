@@ -21,11 +21,12 @@ static unsigned int url_lenght = 0;
 static unsigned int cur_url_scroll_pos = 0;
 
 static Arduino_DataBus  *bus = NULL;
-static Arduino_GFX		*gfx = NULL;
+static Arduino_GFX	*gfx = NULL;
 static Arduino_GFX      *canvas  = NULL; // use a canvas instead of direct gfx-drawing, to prevent display flickering
 
 #ifdef USE_INTERNAL_VU_METER
-unsigned short linToDBTab[5] = {36781, 41285, 46341, 52016, 58386};
+static uint8_t vu_L, vu_R;
+static unsigned short linToDBTab[5] = {36781, 41285, 46341, 52016, 58386};
 /*
 Converts a linear 16-bit value between 0..65535 to decibels.
 Reference level: 32768 = 96dB (largest VS1053b number is 32767 = 95dB).
@@ -60,9 +61,9 @@ void displayd_ILI9341_init() {
    	bus = new Arduino_RPiPicoSPI(PIN_DC_A0, PIN_CS, PIN_SCK, PIN_MOSI, PIN_MISO , spi0 /* spi0/1 */);   // hardware SPI or
    	//Arduino_DataBus *bus = new Arduino_SWSPI(PIN_DC_A0 , PIN_CS , PIN_SCK , PIN_MOSI , GFX_NOT_DEFINED /* MISO */); // default software SPI
    	
-    // for other displays see https://github.com/moononournation/Arduino_GFX/blob/master/src/display/
-    /*:Arduino_ILI9341(Arduino_DataBus *bus, int8_t rst, uint8_t r, bool ips)
-    : Arduino_TFT(bus, rst, r, ips, ILI9341_TFTWIDTH, ILI9341_TFTHEIGHT, 0, 0, 0, 0)*/
+    	// for other displays see https://github.com/moononournation/Arduino_GFX/blob/master/src/display/
+    	/*:Arduino_ILI9341(Arduino_DataBus *bus, int8_t rst, uint8_t r, bool ips)
+    	: Arduino_TFT(bus, rst, r, ips, ILI9341_TFTWIDTH, ILI9341_TFTHEIGHT, 0, 0, 0, 0)*/
    	if (bus != NULL) {
    		gfx = new Arduino_ILI9341(bus, PIN_RST, 3, false);
    	} else {
@@ -113,20 +114,20 @@ void displayd_ILI9341_run() {  /* see great Arduino_GFX lib doc for all graphic 
 			canvas->writeFastHLine(0,30,320,20);
 	
 	    #ifdef USE_ETHERNET
-	       	canvas->setCursor(150, 5);
+	       		canvas->setCursor(150, 5);
 			canvas->print("ETH");
 	    #endif
 	    
 	    #ifdef USE_WIFI
-	    	canvas->setCursor(150, 5);
+	    		canvas->setCursor(150, 5);
 			canvas->print("WiFi");
 	    #endif 
 	        
-	        canvas->writeFastHLine(0,210,320,210);
-	        canvas->setCursor(5, 220);
-	        canvas->print("HTTP-Status-Code:"); canvas->print(info.cur_HTTP_RESPONSE);
+	        	canvas->writeFastHLine(0,210,320,210);
+	        	canvas->setCursor(5, 220);
+	       	 	canvas->print("HTTP-Status-Code:"); canvas->print(info.cur_HTTP_RESPONSE);
 	        
-	    	canvas->setTextColor(GREEN);
+	    		canvas->setTextColor(GREEN);
 			canvas->setCursor(0,50);
 		
 			if (cur_url_scroll_pos < url_lenght)
@@ -134,26 +135,26 @@ void displayd_ILI9341_run() {  /* see great Arduino_GFX lib doc for all graphic 
 			else 
 		  	  cur_url_scroll_pos=0;
 		  
-		    canvas->print(info.cur_url_playing+cur_url_scroll_pos);
+		    	canvas->print(info.cur_url_playing+cur_url_scroll_pos);
 		    
 		    #ifdef USE_INTERNAL_VU_METER
 		    	canvas->setCursor(0,100);
-		    	uint8_t vu_L = (uint8_t) LinToDB(info.pcm_value_left);
+		    	vu_L = (uint8_t) LinToDB(info.pcm_value_left);
 		    	canvas->print("L="); 
 		    	canvas->drawRect(24,  99,  101, 17, WHITE);
 		    	canvas->fillRect(25, 100, vu_L, 15, GREEN);
 		    
 		    	canvas->setCursor(0,120);
-		    	uint8_t vu_R = (uint8_t) LinToDB(info.pcm_value_right);
+		    	vu_R = (uint8_t) LinToDB(info.pcm_value_right);
 		    	canvas->print("R=");
 		    	canvas->drawRect(24, 119,  101, 17, WHITE);
 		    	canvas->fillRect(25, 120, vu_R, 15, GREEN);
 		    
 		    #endif
 		    
-		    canvas->flush();
+		    	canvas->flush();
 
-		}
+		} // if (canvas!=NULL) {
 	    
 	    last_call_time = millis();
 	}	// 	if (millis()-last_call_time > FPS_SYNC_TIME) {
