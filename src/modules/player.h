@@ -10,6 +10,7 @@ struct PlayerInfo {
   int cur_buffer_level;
   Player_State cur_player_state;
   int cur_HTTP_RESPONSE = 0;
+  unsigned int pcm_value_left, pcm_value_right;
 };  
  
 void player_init();
