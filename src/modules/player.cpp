@@ -22,6 +22,7 @@
 	#ifdef USE_VLSI_VSDSP_VU_METER
 	   #include "vs1053b_patches.h"
 	   uint8_t vsdsp_vu_left, vsdsp_vu_right;
+	   uint16_t vu_dsp_both;
 	#endif
 	
 #endif
@@ -246,9 +247,9 @@ void player_run(){
       	    The calculation does not take the volume setting into account.
       	    The VU meter takes about 0.6 MHz of processing power with 48 kHz samplerate. */
       	    
-      	    int16_t vu_dsp_both = VS1053Dekoder.sciRead(0x0F);  // SCI_AICTRL3 
-      		vsdsp_vu_left = ((uint8_t) vu_dsp_both);
-      		vsdsp_vu_right = ((uint8_t) (vu_dsp_both>>8));
+      	    vu_dsp_both = VS1053Dekoder.sciRead(0x0F);  // SCI_AICTRL3 
+      	    vsdsp_vu_left = ((uint8_t) vu_dsp_both);
+      	    vsdsp_vu_right = ((uint8_t) (vu_dsp_both>>8));
       	#endif
 	
         playerFillBufferTask();
