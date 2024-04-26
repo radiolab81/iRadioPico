@@ -1,6 +1,8 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
 
+#include "Arduino.h"
+
 enum Player_State { STOPPED,   PREPARING,   RUNNING ,  PAUSED,	PREPAIRING_FAILED };
 enum Player_Event { NO_EVENT, VOLUME_CHANGED };
 
@@ -10,7 +12,11 @@ struct PlayerInfo {
   int cur_buffer_level;
   Player_State cur_player_state;
   int cur_HTTP_RESPONSE = 0;
-  unsigned int pcm_value_left, pcm_value_right;
+  uint16_t pcm_value_left, pcm_value_right;
+  
+  #ifdef USE_VLSI_VSDSP_VU_METER
+  	 uint8_t vsdsp_vu_left, vsdsp_vu_right;
+  #endif
 };  
  
 void player_init();
