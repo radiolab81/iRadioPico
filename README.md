@@ -59,7 +59,7 @@ Democode vorhanden für:
 - weitere zahlreiche Controller über Arduino_GFX lib
   siehe https://github.com/moononournation/Arduino_GFX#currently-supported-display-wiki
 
-![arduinogfx](https://github.com/BM45/iRadioPico/blob/main/pics4www/st7735.jpg)
+![ili9341](https://github.com/BM45/iRadioPico/blob/main/pics4www/vu.jpg)
 
   Durch die Einbettung des iRadioPico ins Arduino-Ökosystems stehen viele weitere Bibliotheken zur Ansteuerung von Displays zur Verfügung.
 
