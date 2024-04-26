@@ -22,8 +22,15 @@ Die Netzwerkanbindung des iRadioPico erfolgt bei den W (wireless)-Varianten der 
 
 ## Steuerung des iRadioPico durch:
 
-Programmumschaltung zum Beispiel mit (Micro-)Taster, Inkrementaldrehgeber/ Drehimpulsgeber, Potentiometer/Preomat , elementaren httpd-Webserver oder Gestenerkennung (PAJ7620U2-Sensor) wodurch auch die berührungslose Bedienung
+Programmumschaltung zum Beispiel mit (Micro-)Taster, Inkrementaldrehgeber/ Drehimpulsgeber, Potentiometer/Preomat ,
+über elementaren httpd-Webserver 
+
+![httpd](https://github.com/BM45/iRadioPico/blob/main/pics4www/httpd.jpg)
+
+oder Gestenerkennung (PAJ7620U2-Sensor) wodurch auch die berührungslose Bedienung
 ermöglicht wird.
+
+![gesture](https://github.com/BM45/iRadio/raw/master/pics4www/Gestenerkennung.jpeg)
 
 Mit dem PAJ7620U2-Sensor versteht das iRadioPico verschiedene Gesten und kann darauf mit bestimmten Aktionen (Programmumschaltung, Lautstärkeänderung, An/Aus, ...) reagieren. 
 Es werden folgende Gesten erkannt:
