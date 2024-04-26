@@ -152,6 +152,23 @@ void displayd_ILI9341_run() {  /* see great Arduino_GFX lib doc for all graphic 
 		    
 		    #endif
 		    
+		    
+		    #ifdef USE_VLSI_VSDSP_VU_METER
+		    	canvas->setCursor(0,100);
+		    	canvas->print("L=");
+		    	canvas->drawRect(24,  99,  97, 17, WHITE);
+		    	canvas->fillRect(25, 100, info.vsdsp_vu_left, 15, GREEN);
+		    	canvas->setCursor(130,100); 
+		    	canvas->print(info.vsdsp_vu_left);
+		    
+		    	canvas->setCursor(0,120);
+		    	canvas->print("R=");
+		    	canvas->drawRect(24, 119,  97, 17, WHITE);
+		    	canvas->fillRect(25, 120, info.vsdsp_vu_right, 15, GREEN);
+		    	canvas->setCursor(130,120); 
+		    	canvas->print(info.vsdsp_vu_right);		   
+		    #endif
+		    
 		    	canvas->flush();
 
 		} // if (canvas!=NULL) {
