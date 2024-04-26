@@ -17,7 +17,12 @@
 	WiFiClient *stream = NULL;
 	
 	uint8_t volume_L = 10, volume_R = 10;
-	uint16_t pcm_value_left, pcm_value_right;
+	uint16_t pcm_value_left = 0, pcm_value_right = 0;
+	
+	#ifdef USE_VLSI_VSDSP_VU_METER
+	   #include "vs1053b_patches.h"
+	   uint8_t vsdsp_vu_left, vsdsp_vu_right;
+	#endif
 	
 #endif
 
@@ -133,8 +138,7 @@ void player_init() {
    
    #ifdef USE_VS1053_DECODER
 		
-	if (! VS1053Dekoder.begin())
-    	  { // initialisiere VS1053-Dekoder
+	if (!VS1053Dekoder.begin()) { // initialisiere VS1053-Dekoder
      		SERIAL_PORT.println("PLAYER: no VS1053-DSP detected");
      		while (1) delay(1000);
   	  }			
@@ -142,6 +146,16 @@ void player_init() {
    	   SERIAL_PORT.println("PLAYER: VS1053-DSP found");
 	   VS1053Dekoder.setVolume(volume_L, volume_R);
 	   
+	   #ifdef USE_VLSI_VSDSP_VU_METER   
+	      // load vs1053 apps and patches from vs1053b_patches.h
+	      VS1053Dekoder.applyPatch(plugin, PLUGIN_SIZE);
+	      
+	      /*VU Meter -SCI_STATUS bit 9 enables VU meter, which calculates a leaking peak sample value 
+	      from both channels and returns the values in 1 dB resolution through SCI_AICTRL3.
+	      The high 8 bits represent the left channel, the low 8 bits the right channel */
+  	      VS1053Dekoder.sciWrite(0x01, VS1053Dekoder.sciRead(0x01) | (1<<9) );  // SCI_STATUS(0x01)      
+	   #endif
+	   	
 	   // start with programm no 0
 	   actual_channel_or_file_ID = 0;
 	   create_audioplayer_pipeline(actual_channel_or_file_ID);
@@ -185,16 +199,16 @@ void playerFillBufferTask()
 {
      #ifdef USE_VS1053_DECODER
 	if (state == RUNNING) {
-	  if (stream!=NULL) {
-     	     if (stream->available() > 32) {
-		if (!queue.isFull()) {
-                  Buffer32Byte *decoded_audio = new Buffer32Byte();
-		  stream->read(decoded_audio->data, 32);
- 		  queue.push(decoded_audio);
-		}
-      	     }	 
+  	  if (stream!=NULL) {
+     	    if (stream->available() > 32) {
+	      if (!queue.isFull()) {
+                Buffer32Byte *decoded_audio = new Buffer32Byte();
+	 	stream->read(decoded_audio->data, 32);
+   		queue.push(decoded_audio);
+	      }
+      	    }	 
 	  } 
-	}
+        }
      #endif
   
      #ifdef USE_INTERNAL_CODEC_WITH_CUSTOM_LIB
@@ -220,6 +234,21 @@ void player_run(){
       		// read DAC registers for right channel
       		VS1053Dekoder.sciWrite(VS1053_REG_WRAMADDR,0xC016);
       		pcm_value_right = VS1053Dekoder.sciRead(VS1053_REG_WRAM);
+      	#endif
+      	
+      	#ifdef USE_VLSI_VSDSP_VU_METER
+      	    /*VU Meter - SCI_STATUS bit 9 enables VU meter, which calculates a leaking peak sample value
+      	    from both channels and returns the values in 1 dB resolution through SCI_AICTRL3. 
+      	    The high 8 bits represent the left channel, the low 8 bits the right channel.
+      	    Note that the following has changed from the previous release.
+      	    Values from 0 to 96 are valid for both channels. 0 means no sound, 96 is highest level.
+      	    In practise the highest value will be 95, the signal is probably clipping if you get 96.
+      	    The calculation does not take the volume setting into account.
+      	    The VU meter takes about 0.6 MHz of processing power with 48 kHz samplerate. */
+      	    
+      	    int16_t vu_dsp_both = VS1053Dekoder.sciRead(0x0F);  // SCI_AICTRL3 
+      		vsdsp_vu_left = ((uint8_t) vu_dsp_both);
+      		vsdsp_vu_right = ((uint8_t) (vu_dsp_both>>8));
       	#endif
 	
         playerFillBufferTask();
@@ -336,8 +365,17 @@ PlayerInfo getPlayerInfo(void) {
      
    info.cur_player_state = state;
    info.cur_HTTP_RESPONSE = http_get_response;
-   info.pcm_value_left = pcm_value_left;
-   info.pcm_value_right = pcm_value_right;
+   
+   #ifdef USE_VS1053_DECODER
+   		info.pcm_value_left = pcm_value_left;
+   		info.pcm_value_right = pcm_value_right;
+   #endif
+   
+   #ifdef USE_VLSI_VSDSP_VU_METER
+      		info.vsdsp_vu_left = vsdsp_vu_left;
+      		info.vsdsp_vu_right = vsdsp_vu_right;
+   #endif
+   
    return info;
 }
 
