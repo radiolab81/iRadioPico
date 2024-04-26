@@ -23,6 +23,7 @@ Die Netzwerkanbindung des iRadioPico erfolgt bei den W (wireless)-Varianten der 
 ## Steuerung des iRadioPico durch:
 
 Programmumschaltung zum Beispiel mit (Micro-)Taster, Inkrementaldrehgeber/ Drehimpulsgeber, Potentiometer/Preomat ,
+
 über elementaren httpd-Webserver 
 
 ![httpd](https://github.com/BM45/iRadioPico/blob/main/pics4www/httpd.jpg)
