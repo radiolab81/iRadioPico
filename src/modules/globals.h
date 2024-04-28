@@ -3,6 +3,10 @@
 
 #define SERIAL_PORT Serial
 
+#define USE_NTP_CLOCK_SYNC
+
+#define USE_WATCHDOG
+
 //#define USE_SDCARD
 #define USE_LITTLEFS
 
@@ -44,7 +48,5 @@ extern unsigned int actual_channel_or_file_ID;
 
 extern char ssid[32];           
 extern char password[64];
-
-
 
 #endif
