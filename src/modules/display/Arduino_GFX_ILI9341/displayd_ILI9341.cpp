@@ -36,7 +36,7 @@ be represented with integers.
 - Assumes a ratio of 2 is 6 dB, when it actually is approx. 6.02 dB.
 see; https://www.vlsi.fi/fileadmin/software/VS10XX/VS1053_VS1063_PcmRecorder.pdf  ,2.4.3 Building a Useful VU Meter
 */
-unsigned short LinToDB(unsigned short n) {
+static unsigned short LinToDB(unsigned short n) {
 	int res = 96, i;
 	if (!n) /* No signal should return minus infinity */
 	  return 0;
