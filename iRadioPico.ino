@@ -21,8 +21,16 @@
 //#include "src/modules/display/Arduino_GFX_st7735/displayd_st7735.h"
 //#include "src/modules/display/baby_metz/baby_metz.h"
 //#include "src/modules/display/Arduino_GFX_ILI9341/displayd_ILI9341.h"
+//#include "src/modules/display/ClockRadio/displayd_clockradio.h"
 
-//#include "src/modules/httpd.h"
+
+#include "src/modules/httpd.h"
+#include "src/modules/ntp_rtc.h"
+
+#include "hardware/structs/rtc.h"
+#include "hardware/rtc.h"
+#include "pico/stdlib.h"
+#include "pico/util/datetime.h"
 
 #ifdef USE_ETHERNET
 
@@ -53,6 +61,17 @@
 #endif
 
 static unsigned long global_heartbeat_counter = 0;
+void task_heartbeat()
+{
+     #ifdef USE_WATCHDOG
+       rp2040.wdt_reset(); // good dog, don't bark
+     #endif
+     
+     SERIAL_PORT.printf("iRadioPico: Heartbeat from Core %i Total Heap: %i bytes Used Heap: %i bytes Free Heap: %i bytes \n",rp2040.cpuid(), 
+                          rp2040.getTotalHeap(), rp2040.getUsedHeap(), rp2040.getFreeHeap());
+     SERIAL_PORT.flush();
+     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN)); 
+}
 
 //********************************************************************
 // thats our "rc.local" to start all services we need on cpu_core_0
@@ -65,7 +84,16 @@ void setup() {
   /*while (!SERIAL_PORT) {
     delay(1);  // wait for serial port to connect. Needed for native USB port only
   }*/
-  
+
+  // Start the RTC
+  rtc_init();
+  // Dedicated to Emmett Lathrop Brown, Ph.D, the day he invented what makes time travel possible, the flux capacitor
+  datetime_t t = { .year  = 1955, .month = 11, .day   = 05, .dotw  = 6, .hour  = 00, .min   = 00, .sec   = 00  };
+  rtc_set_datetime(&t);
+
+  #ifdef USE_WATCHDOG
+    rp2040.wdt_begin(8300); // You have to pet the dog at least every 8.3 seconds, otherwise he will bark!
+  #endif
   
   // PLAYLIST init
   #ifdef USE_SDCARD
@@ -135,6 +163,9 @@ void setup() {
        }
   #endif //   #ifdef USE_WIFI
 
+  #ifdef USE_NTP_CLOCK_SYNC
+    ntp_rtc_init();
+  #endif 
 
   // START (your own) TASKs: PLAYER, DISPLAYD, GPIOD, ... on cpu0
   player_init();
@@ -142,6 +173,7 @@ void setup() {
   //gpiod_keys_init();
   //gpiod_gesture_init(); 
   //gpiod_potentiometer_init();
+  
 }
 
 
@@ -150,21 +182,25 @@ void setup() {
 // Att: network related stuff (ETH, WiFi libs) works only on core 0
 //********************************************************************
 void loop() {
+ 
+   #ifdef USE_NTP_CLOCK_SYNC
+     ntp_rtc_run();
+   #endif 
    
    player_run();
    gpiod_rotary_run();
    //gpiod_keys_run();
    //gpiod_gesture_run();
    //gpiod_potentiometer_run();
+
+   if (global_heartbeat_counter%100000 == 0)   
+     task_heartbeat();
+     
 }
 
 
 
-void task_heartbeat()
-{
-     SERIAL_PORT.println("iRadioPico: Heartbeat");
-     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN)); 
-}
+
 
 //********************************************************************
 // thats our "rc.local" to start all services we need on cpu_core_1
@@ -173,11 +209,13 @@ void task_heartbeat()
 void setup1() {
   //displayd_i2c_lcd_init();
   displayd_ssd1306_init();
-  //displayd_st7735_init();
+  //displayd_st7735_init(); 
   //displayd_baby_metz_init();
   //displayd_ILI9341_init();
+  //displayd_clockradio_init();
 
   //httpd_init();
+
 }
 
 //********************************************************************
@@ -190,11 +228,13 @@ void loop1() {
   //displayd_st7735_run();
   //displayd_baby_metz_run();
   //displayd_ILI9341_run();
+  //displayd_clockradio_run();
 
   //httpd_run();
-   
+
   global_heartbeat_counter++;
-  if (global_heartbeat_counter%1330000 == 0)
+  
+  if (global_heartbeat_counter%100000 == 0)
      task_heartbeat();
   
 }
