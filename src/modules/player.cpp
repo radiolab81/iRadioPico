@@ -5,6 +5,13 @@
 #include <HTTPClient.h>
 #include "QueueArray.h"
 
+#ifdef USE_LITTLEFS
+   #include "lfs.h"
+   
+   #ifdef USE_AUTO_SAVE
+       #include "autosave.h"
+   #endif
+#endif
 
 #ifdef USE_VS1053_DECODER
 
@@ -16,7 +23,7 @@
 	HTTPClient http;
 	WiFiClient *stream = NULL;
 	
-	uint8_t volume_L = 10, volume_R = 10;
+	uint8_t volume_L, volume_R;
 	uint16_t pcm_value_left = 0, pcm_value_right = 0;
 	
 	#ifdef USE_VLSI_VSDSP_VU_METER
@@ -58,7 +65,7 @@ void terminate_audioplayer_pipeline() {
   	stream = NULL;
   	// clear buffer mem
   	while (!queue.isEmpty()) {
-    	delete(queue.pop());
+    	  delete(queue.pop());
   	}
   	 
     //http.end(); -> same issue like https://github.com/espressif/arduino-esp32/issues/828
@@ -102,9 +109,9 @@ void create_audioplayer_pipeline(int channel_num) {
   #ifdef USE_VS1053_DECODER
   	// Use WiFiClient class to create TCP connections
   	if (!client.connect(new_host, port)) {
-    	SERIAL_PORT.println("PLAYER: connection failed, try next one");
-    	state = PREPAIRING_FAILED;
-    	delay(1000);
+    	  SERIAL_PORT.println("PLAYER: connection failed, try next one");
+    	  state = PREPAIRING_FAILED;
+    	  delay(1000);
   	}
 
   	// do a GET request
@@ -114,9 +121,9 @@ void create_audioplayer_pipeline(int channel_num) {
   	http.setFollowRedirects(HTTPC_FORCE_FOLLOW_REDIRECTS);
   	http_get_response = http.GET();
   	if (http_get_response != HTTP_CODE_OK) {
-    	http.end();
-    	SERIAL_PORT.println("PLAYER: Can't open HTTP request");
-    	state = STOPPED;
+    	  http.end();
+    	  SERIAL_PORT.println("PLAYER: Can't open HTTP request");
+    	  state = STOPPED;
   	}
   	SERIAL_PORT.print("PLAYER: server response code is ");
   	SERIAL_PORT.println(http_get_response); 
@@ -145,7 +152,6 @@ void player_init() {
   	  }			
 
    	   SERIAL_PORT.println("PLAYER: VS1053-DSP found");
-	   VS1053Dekoder.setVolume(volume_L, volume_R);
 	   
 	   #ifdef USE_VLSI_VSDSP_VU_METER   
 	      // load vs1053 apps and patches from vs1053b_patches.h
@@ -159,6 +165,16 @@ void player_init() {
 	   	
 	   // start with programm no 0
 	   actual_channel_or_file_ID = 0;
+	   // start volume
+   	   volume_L = 10, volume_R = 10;   	   
+	
+	      
+	#ifdef USE_LITTLEFS
+         #ifdef USE_AUTO_SAVE
+            readRadioSettingsLittleFS();  // actual_channel_or_file_ID, volume_L/R ... overwritten by settings.txt 
+         #endif
+       #endif
+       VS1053Dekoder.setVolume(volume_L, volume_R);
 	   create_audioplayer_pipeline(actual_channel_or_file_ID);
 	   
    #endif
