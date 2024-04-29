@@ -30,7 +30,7 @@
 
 #include "src/modules/httpd.h"
 #include "src/modules/ntp_rtc.h"
-S#include "hardware/rtc.h"
+#include "hardware/rtc.h"
 
 #ifdef USE_ETHERNET
 
