@@ -7,14 +7,18 @@
 
 #ifdef USE_LITTLEFS
    #include "src/modules/lfs.h"
+   
+    #ifdef USE_AUTO_SAVE
+        #include "src/modules/autosave.h"
+    #endif
 #endif
 
 #include "src/modules/player.h"
 
-#include "src/modules/gpiod_rotary.h"
+//#include "src/modules/gpiod_rotary.h"
 #include "src/modules/gpiod_keys.h"
-#include "src/modules/gesture/gpiod_gesture.h"
-#include "src/modules/gpiod_potentiometer.h"
+//#include "src/modules/gesture/gpiod_gesture.h"
+//#include "src/modules/gpiod_potentiometer.h"
 
 //#include "src/modules/display/I2C_LCD/displayd_i2c_lcd.h"
 #include "src/modules/display/u8g2_ssd1306/displayd_ssd1306.h"
@@ -67,7 +71,7 @@ void task_heartbeat()
        rp2040.wdt_reset(); // good dog, don't bark
      #endif
      
-     SERIAL_PORT.printf("iRadioPico: Heartbeat from Core %i Total Heap: %i bytes Used Heap: %i bytes Free Heap: %i bytes \n",rp2040.cpuid(), 
+     SERIAL_PORT.printf("iRadioPico: @%llds Heartbeat from Core%i @ %iHz, Total Heap: %i bytes, Used Heap: %i bytes, Free Heap: %i bytes \n",rp2040.getCycleCount64()/F_CPU, rp2040.cpuid(), F_CPU, 
                           rp2040.getTotalHeap(), rp2040.getUsedHeap(), rp2040.getFreeHeap());
      SERIAL_PORT.flush();
      digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN)); 
@@ -167,10 +171,16 @@ void setup() {
     ntp_rtc_init();
   #endif 
 
+  #ifdef USE_LITTLEFS
+    #ifdef USE_AUTO_SAVE
+        auto_save_init();
+    #endif
+  #endif
+  
   // START (your own) TASKs: PLAYER, DISPLAYD, GPIOD, ... on cpu0
   player_init();
-  gpiod_rotary_init(); 
-  //gpiod_keys_init();
+  //gpiod_rotary_init(); 
+  gpiod_keys_init();
   //gpiod_gesture_init(); 
   //gpiod_potentiometer_init();
   
@@ -187,9 +197,15 @@ void loop() {
      ntp_rtc_run();
    #endif 
    
+  #ifdef USE_LITTLEFS
+    #ifdef USE_AUTO_SAVE
+        auto_save_run();
+    #endif
+  #endif
+  
    player_run();
-   gpiod_rotary_run();
-   //gpiod_keys_run();
+   //gpiod_rotary_run();
+   gpiod_keys_run();
    //gpiod_gesture_run();
    //gpiod_potentiometer_run();
 
@@ -225,7 +241,7 @@ void setup1() {
 void loop1() {
   //displayd_i2c_lcd_run();
   displayd_ssd1306_run();
-  //displayd_st7735_run();
+  //displayd_st7735_run
   //displayd_baby_metz_run();
   //displayd_ILI9341_run();
   //displayd_clockradio_run();
