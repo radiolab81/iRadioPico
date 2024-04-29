@@ -19,7 +19,7 @@ int readWifiConfigLittleFS(){
      SERIAL_PORT.println("LITTLEFS: wifi.txt exists.");
      File fd = LittleFS.open("wifi.txt","r");
      if (fd) {
-	   while (fd.available()) {
+	while (fd.available()) {
           String line = fd.readStringUntil('\n');  // \n character is discarded from buffer
      	  
      	  // SSID
@@ -130,7 +130,7 @@ int readRadioSettingsLittleFS() {
      SERIAL_PORT.flush();
      
      if ( line.indexOf("actual_channel_or_file_ID=") != -1) {
-       String data = line.substring(line.indexOf("=")+1, data.length());
+       String data = line.substring(line.indexOf("ID=")+3);
        actual_channel_or_file_ID = data.toInt();
      } 
      
