@@ -1,6 +1,6 @@
 #include "globals.h"
 
-// set by wifi.txt and playlist.m3u from SDCARD
+// set by wifi.txt,playlist.m3u,settings.txt from SDCARD/LFS
 
 char* playlist[MAX_CHANNELS_IN_LIST];
 unsigned int channels_in_list;
