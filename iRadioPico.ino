@@ -30,11 +30,7 @@
 
 #include "src/modules/httpd.h"
 #include "src/modules/ntp_rtc.h"
-
-#include "hardware/structs/rtc.h"
-#include "hardware/rtc.h"
-#include "pico/stdlib.h"
-#include "pico/util/datetime.h"
+S#include "hardware/rtc.h"
 
 #ifdef USE_ETHERNET
 
