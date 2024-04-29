@@ -9,7 +9,7 @@ int readWifiConfigLittleFS(){
    SERIAL_PORT.println("\nLITTLEFS: Initializing LittleFS...");
     
    if (!LittleFS.begin()){
-     Serial.println(F("LITTLEFS: initialization failed!"));
+     SERIAL_PORT.println(F("LITTLEFS: initialization failed!"));
      return LFS_FAILURE;
    }
    SERIAL_PORT.println("LITTLEFS: initialization done.");;
@@ -52,7 +52,7 @@ int readPlaylistLittleFS() {
   SERIAL_PORT.println("\nLITTLEFS: Initializing LittleFS...");
     
   if (!LittleFS.begin()){
-      Serial.println(F("LITTLEFS: initialization failed!"));
+      SERIAL_PORT.println(F("LITTLEFS: initialization failed!"));
       return LFS_FAILURE;
   }
   SERIAL_PORT.println("LITTLEFS: initialization done.");
@@ -85,3 +85,58 @@ int readPlaylistLittleFS() {
   }
   return LFS_OK;
 } 
+
+
+int writeRadioSettingsLittleFS() {
+  SERIAL_PORT.println("\nLITTLEFS: Initializing LittleFS...");
+    
+  if (!LittleFS.begin()){
+      SERIAL_PORT.println(F("LITTLEFS: initialization failed!"));
+      return LFS_FAILURE;
+  }
+  SERIAL_PORT.println("LITTLEFS: initialization done.");
+         
+  File fd = LittleFS.open("/settings.txt", "w");
+  if (!fd) {
+    SERIAL_PORT.println("LITTLEFS: write radio settings to file failed");
+    return LFS_FAILURE_NO_FILE;
+  }
+  
+  fd.printf("actual_channel_or_file_ID=%i\n",actual_channel_or_file_ID);
+  fd.close();
+  SERIAL_PORT.println("LITTLEFS: radio settings written to file");
+  
+  return LFS_OK;
+}
+
+int readRadioSettingsLittleFS() {
+  SERIAL_PORT.println("\nLITTLEFS: Initializing LittleFS...");
+    
+  if (!LittleFS.begin()){
+      SERIAL_PORT.println(F("LITTLEFS: initialization failed!"));
+      return LFS_FAILURE;
+  }
+  SERIAL_PORT.println("LITTLEFS: initialization done.");
+         
+  File fd = LittleFS.open("/settings.txt", "r");
+  if (!fd) {
+    SERIAL_PORT.println("LITTLEFS: read radio settings from file failed");
+    return LFS_FAILURE_NO_FILE;
+  }
+  
+  while (fd.available()) {
+     String line = fd.readStringUntil('\n');  // \n character is discarded from buffer
+     SERIAL_PORT.println(line);
+     SERIAL_PORT.flush();
+     
+     if ( line.indexOf("actual_channel_or_file_ID=") != -1) {
+       String data = line.substring(line.indexOf("=")+1, data.length());
+       actual_channel_or_file_ID = data.toInt();
+     } 
+     
+  } //  while (fd.available()) {
+  
+  fd.close();
+  SERIAL_PORT.println("LITTLEFS: radio settings imported from settings.txt");
+  return LFS_OK;
+}
