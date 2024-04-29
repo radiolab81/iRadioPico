@@ -10,6 +10,9 @@
 //#define USE_SDCARD
 #define USE_LITTLEFS
 
+// AUTO_SAVE only on LitteFS at the moment, so USE_LITTLEFS must be set
+#define USE_AUTO_SAVE
+
 //#define USE_ETHERNET 
 //#define USE_ENC28J60
 //#define USE_W5100
@@ -38,9 +41,9 @@
 #define VS1053_RESET   9   // VS1053 reset pin (-1 unbelegt)
 
 //#define USE_INTERNAL_VU_METER
-//#define USE_VLSI_VSDSP_VU_METER
+#define USE_VLSI_VSDSP_VU_METER
 
-// set by wifi.txt and playlist.m3u from SDCARD
+// set by wifi.txt, playlist.m3u and settings.txt from SDCARD/LFS
 #define MAX_CHANNELS_IN_LIST 100
 extern char* playlist[MAX_CHANNELS_IN_LIST];
 extern unsigned int channels_in_list;
