@@ -3,9 +3,9 @@
 
 #include "globals.h"
 
-#define  LFS_OK				 0
+#define  LFS_OK				       0
 #define  LFS_FAILURE_NO_FILE 1
-#define  LFS_FAILURE		 2
+#define  LFS_FAILURE		     2
 
 
 /**
@@ -28,5 +28,24 @@ int readWifiConfigLittleFS();
  */
 int readPlaylistLittleFS();
 
+
+/**
+ * @brief      writes all radio-settings to settings.txt/littlefs. 
+ *
+ * @param      void
+ *
+ * @return     LFS_OK,LFS_FAILURE,LFS_FAILURE_NO_FILE
+ */
+int writeRadioSettingsLittleFS();
+
+
+/**
+ * @brief      reads radio-settings from settings.txt/littlefs. 
+ *
+ * @param      void
+ *
+ * @return     LFS_OK,LFS_FAILURE,LFS_FAILURE_NO_FILE
+ */
+int readRadioSettingsLittleFS();
 
 #endif
