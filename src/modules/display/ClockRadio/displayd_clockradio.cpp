@@ -9,6 +9,7 @@
 #include "pico/stdlib.h"
 #include "pico/util/datetime.h"
 
+#include "mode_switcher.h"
 
 #define PIN_DC_A0 21
 #define PIN_RST 20
@@ -101,16 +102,23 @@ void displayd_clockradio_init() {
 		canvas->println("DISPLAYD init...");
 		canvas->flush();
 	}
+	
+	mode_switcher_init();
 }
 
 
 void displayd_clockradio_run() {  /* see great Arduino_GFX lib doc for all graphic commands/primitives */
 	
 	if (millis()-last_call_time > FPS_SYNC_TIME) {
-		PlayerInfo info = getPlayerInfo();
-		url_lenght = String(info.cur_url_playing).length();
+	
+		mode_switcher_run();
+	
+	    if (radiomode == INTERNETRADIO) {
+	      // backlight pin on ? 
+		  PlayerInfo info = getPlayerInfo();
+		  url_lenght = String(info.cur_url_playing).length();
 		
-		if (canvas!=NULL) {
+		  if (canvas!=NULL) {
 			canvas->fillScreen(BLACK);
 			
 			canvas->setTextSize(2);
@@ -120,15 +128,15 @@ void displayd_clockradio_run() {  /* see great Arduino_GFX lib doc for all graph
 			canvas->setCursor(300, 5);
 			canvas->print("%");				
 	
-	    #ifdef USE_ETHERNET
-	       		canvas->setCursor(205, 5);
+	      #ifdef USE_ETHERNET
+	       	canvas->setCursor(205, 5);
 			canvas->print("ETH");
-	    #endif
+	      #endif
 	    
-	    #ifdef USE_WIFI
-	    		canvas->setCursor(205, 5);
+	      #ifdef USE_WIFI
+	    	canvas->setCursor(205, 5);
 			canvas->print("WiFi");
-	    #endif 
+	      #endif 
 	    		
 	    	canvas->fillRect(0, 30,  320, 40, LIGHTGREY);
 			canvas->fillRect(0, 34,  320, 32, WHITE);
@@ -188,7 +196,15 @@ void displayd_clockradio_run() {  /* see great Arduino_GFX lib doc for all graph
 	       	canvas->print("HTTP-Status-Code:"); canvas->print(info.cur_HTTP_RESPONSE);
 	 
 			canvas->flush();	      
-		} // if (canvas!=NULL) {
+		  } // if (canvas!=NULL) {
+		} // if (radiomode == INTERNETRADIO) {
+	    
+	    
+	    if (radiomode == STANDBY) {
+	      // maybe backlight pin off
+	      canvas->fillScreen(BLACK);
+	      canvas->flush();
+	    } //   if (radiomode == STANDBY) {
 	    
 	    last_call_time = millis();
 	}	// 	if (millis()-last_call_time > FPS_SYNC_TIME) {
