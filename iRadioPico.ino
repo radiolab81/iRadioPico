@@ -26,6 +26,7 @@
 //#include "src/modules/display/baby_metz/baby_metz.h"
 //#include "src/modules/display/Arduino_GFX_ILI9341/displayd_ILI9341.h"
 //#include "src/modules/display/ClockRadio/displayd_clockradio.h"
+//#include "src/modules/display/ClockRadio/gpiod_clockradio.h"
 
 
 #include "src/modules/httpd.h"
@@ -179,6 +180,7 @@ void setup() {
   gpiod_keys_init();
   //gpiod_gesture_init(); 
   //gpiod_potentiometer_init();
+  //gpiod_clockradio_init();
   
 }
 
@@ -198,6 +200,7 @@ void loop() {
    gpiod_keys_run();
    //gpiod_gesture_run();
    //gpiod_potentiometer_run();
+   //gpiod_clockradio_run();
 
    #ifdef USE_LITTLEFS
     #ifdef USE_AUTO_SAVE
