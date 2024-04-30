@@ -10,3 +10,5 @@ char ssid[32];
 char password[64];
 
 unsigned int volume_L, volume_R;
+
+RadioMode radiomode = INTERNETRADIO;

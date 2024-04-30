@@ -5,7 +5,7 @@
 
 #define USE_NTP_CLOCK_SYNC
 
-#define USE_WATCHDOG
+//#define USE_WATCHDOG
 
 //#define USE_SDCARD
 #define USE_LITTLEFS
@@ -41,7 +41,7 @@
 #define VS1053_RESET   9   // VS1053 reset pin (-1 unbelegt)
 
 //#define USE_INTERNAL_VU_METER
-//#define USE_VLSI_VSDSP_VU_METER
+#define USE_VLSI_VSDSP_VU_METER
 
 // set by wifi.txt, playlist.m3u and settings.txt from SDCARD/LFS
 #define MAX_CHANNELS_IN_LIST 100
@@ -53,5 +53,9 @@ extern char ssid[32];
 extern char password[64];
 
 extern unsigned int volume_L, volume_R;
+
+
+enum RadioMode { STANDBY, INTERNETRADIO, FMTUNER };
+extern RadioMode radiomode;
 
 #endif
