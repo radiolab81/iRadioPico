@@ -8,3 +8,5 @@ unsigned int actual_channel_or_file_ID;
 
 char ssid[32];           
 char password[64];
+
+unsigned int volume_L, volume_R;
