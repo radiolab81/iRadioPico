@@ -52,4 +52,6 @@ extern unsigned int actual_channel_or_file_ID;
 extern char ssid[32];           
 extern char password[64];
 
+extern unsigned int volume_L, volume_R;
+
 #endif
