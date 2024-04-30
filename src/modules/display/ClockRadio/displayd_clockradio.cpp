@@ -75,14 +75,14 @@ void displayd_clockradio_init() {
     	/*:Arduino_ILI9341(Arduino_DataBus *bus, int8_t rst, uint8_t r, bool ips)
     	: Arduino_TFT(bus, rst, r, ips, ILI9341_TFTWIDTH, ILI9341_TFTHEIGHT, 0, 0, 0, 0)*/
    	if (bus != NULL) {
-   		gfx = new Arduino_ILI9341(bus, PIN_RST, 3, false);
+   	  gfx = new Arduino_ILI9341(bus, PIN_RST, 3, false);
    	} else {
    	  SERIAL_PORT.println("DISPLAYD: ILI9341 bus failed");
    	  exit(-1);
    	}
    	
    	if (gfx != NULL) {
-   	    canvas = new Arduino_Canvas_Indexed(320, 240, gfx); // vy slow, but Arduino_Canvas/ILI9341 causes WiFi side effects -> tbo.
+   	 canvas = new Arduino_Canvas_Indexed(320, 240, gfx); // vy slow, but Arduino_Canvas/ILI9341 causes WiFi side effects -> tbo.
 	} else {
    	  SERIAL_PORT.println("DISPLAYD: ILI9341 gfx failed");
    	  exit(-1);
@@ -94,13 +94,13 @@ void displayd_clockradio_init() {
     	exit(-1);
   	}
 	
-    if (canvas != NULL) {
-		canvas->fillScreen(BLACK);
-		canvas->setTextColor(WHITE);
-		canvas->setTextSize(1);
-		canvas->setCursor(30, 64);
-		canvas->println("DISPLAYD init...");
-		canvas->flush();
+        if (canvas != NULL) {
+	  canvas->fillScreen(BLACK);
+	  canvas->setTextColor(WHITE);
+	  canvas->setTextSize(1);
+	  canvas->setCursor(30, 64);
+	  canvas->println("DISPLAYD init...");
+	  canvas->flush();
 	}
 	
 	mode_switcher_init();
@@ -111,93 +111,93 @@ void displayd_clockradio_run() {  /* see great Arduino_GFX lib doc for all graph
 	
 	if (millis()-last_call_time > FPS_SYNC_TIME) {
 	
-		mode_switcher_run();
-	
+	    mode_switcher_run();
+		
 	    if (radiomode == INTERNETRADIO) {
 	      // backlight pin on ? 
-		  PlayerInfo info = getPlayerInfo();
-		  url_lenght = String(info.cur_url_playing).length();
+	      PlayerInfo info = getPlayerInfo();
+	      url_lenght = String(info.cur_url_playing).length();
 		
-		  if (canvas!=NULL) {
-			canvas->fillScreen(BLACK);
+	      if (canvas!=NULL) {
+		canvas->fillScreen(BLACK);
 			
-			canvas->setTextSize(2);
-			canvas->setTextColor(WHITE);
-			canvas->setCursor(260, 5);
-			canvas->print(info.cur_buffer_level); 
-			canvas->setCursor(300, 5);
-			canvas->print("%");				
+		canvas->setTextSize(2);
+		canvas->setTextColor(WHITE);
+		canvas->setCursor(260, 5);
+		canvas->print(info.cur_buffer_level); 
+		canvas->setCursor(300, 5);
+		canvas->print("%");				
 	
 	      #ifdef USE_ETHERNET
 	       	canvas->setCursor(205, 5);
-			canvas->print("ETH");
+		canvas->print("ETH");
 	      #endif
 	    
 	      #ifdef USE_WIFI
 	    	canvas->setCursor(205, 5);
-			canvas->print("WiFi");
+		canvas->print("WiFi");
 	      #endif 
 	    		
 	    	canvas->fillRect(0, 30,  320, 40, LIGHTGREY);
-			canvas->fillRect(0, 34,  320, 32, WHITE);
+		canvas->fillRect(0, 34,  320, 32, WHITE);
 	           
 	    	canvas->setTextColor(BLACK);
 	    	canvas->setTextSize(2);
 	    	
 	    	canvas->setCursor(10, 42);
-			canvas->print(info.cur_ch_no);
+		canvas->print(info.cur_ch_no);
 			
-			canvas->setCursor(45,42);
-			if (cur_url_scroll_pos < url_lenght)
-		  	  cur_url_scroll_pos++;
-			else 
-		  	  cur_url_scroll_pos=0;
+		canvas->setCursor(45,42);
+		if (cur_url_scroll_pos < url_lenght)
+	  	  cur_url_scroll_pos++;
+		else 
+	  	  cur_url_scroll_pos=0;
 		  
-		    	//canvas->print(info.cur_url_playing+cur_url_scroll_pos);
-		    	canvas->printf("%.*s", 22, info.cur_url_playing+cur_url_scroll_pos);
+	    	//canvas->print(info.cur_url_playing+cur_url_scroll_pos);
+		canvas->printf("%.*s", 22, info.cur_url_playing+cur_url_scroll_pos);
 		    
 		   
-		    canvas->setTextColor(WHITE);
+	        canvas->setTextColor(WHITE);
 	    	
-		    #ifdef USE_INTERNAL_VU_METER
-		    	vu_L = (uint8_t) LinToDB(info.pcm_value_left);
-		    	canvas->drawRect(24, 180,  17, -101, WHITE);
-		    	canvas->fillRect(25, 179,  15, -vu_L, GREEN);
+	        #ifdef USE_INTERNAL_VU_METER
+	           vu_L = (uint8_t) LinToDB(info.pcm_value_left);
+	    	   canvas->drawRect(24, 180,  17, -101, WHITE);
+	    	   canvas->fillRect(25, 179,  15, -vu_L, GREEN);
 		    
-		    	vu_R = (uint8_t) LinToDB(info.pcm_value_right);
-		    	canvas->drawRect(54, 180,  17, -101, WHITE);
-		    	canvas->fillRect(55, 179, 15, -vu_R, GREEN);		    
-		    #endif
+	   	   vu_R = (uint8_t) LinToDB(info.pcm_value_right);
+	    	   canvas->drawRect(54, 180,  17, -101, WHITE);
+	           canvas->fillRect(55, 179, 15, -vu_R, GREEN);		    
+	        #endif
 		    
 		    
-		    #ifdef USE_VLSI_VSDSP_VU_METER    	
-		    	canvas->drawRect(24, 180,  17, -97, WHITE);
-		    	canvas->fillRect(25, 179, 15, -info.vsdsp_vu_left, GREEN);
+	        #ifdef USE_VLSI_VSDSP_VU_METER    	
+	    	   canvas->drawRect(24, 180,  17, -97, WHITE);
+		   canvas->fillRect(25, 179, 15, -info.vsdsp_vu_left, GREEN);
 		    	
-		    	canvas->drawRect(54, 180,  17, -97, WHITE);
-		    	canvas->fillRect(55, 179, 15, -info.vsdsp_vu_right, GREEN);
+		   canvas->drawRect(54, 180,  17, -97, WHITE);
+		   canvas->fillRect(55, 179, 15, -info.vsdsp_vu_right, GREEN);
 		    	
-		    #endif
+		#endif
 		    
 		    
-		    if (rtc_running()) {
-			  if (millis()-last_ask_for_time > ASK_FOR_TIME_DELAY_MS) {
-		      	rtc_get_datetime(&date_time);
-              	last_ask_for_time = millis();
-		      }	     
+		if (rtc_running()) {
+		  if (millis()-last_ask_for_time > ASK_FOR_TIME_DELAY_MS) {
+		    rtc_get_datetime(&date_time);
+              	    last_ask_for_time = millis();
+		  }	     
 		      
-		      canvas->setCursor(0,5);
-              canvas->printf("%0.2i:%0.2i %i\\%i\\%i\n",date_time.hour, date_time.min, date_time.month, date_time.day, date_time.year); 
-		    }
+	         canvas->setCursor(0,5);
+                 canvas->printf("%0.2i:%0.2i %i\\%i\\%i\n",date_time.hour, date_time.min, date_time.month, date_time.day, date_time.year); 
+	        }
 
-            canvas->setTextColor(WHITE);
-            canvas->writeFastHLine(0,210,320,WHITE);
+                canvas->setTextColor(WHITE);
+                canvas->writeFastHLine(0,210,320,WHITE);
 	        canvas->setCursor(5, 220);
 	       	canvas->print("HTTP-Status-Code:"); canvas->print(info.cur_HTTP_RESPONSE);
 	 
-			canvas->flush();	      
-		  } // if (canvas!=NULL) {
-		} // if (radiomode == INTERNETRADIO) {
+		canvas->flush();	      
+	      } // if (canvas!=NULL) {
+	     } // if (radiomode == INTERNETRADIO) {
 	    
 	    
 	    if (radiomode == STANDBY) {
