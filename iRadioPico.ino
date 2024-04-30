@@ -193,7 +193,6 @@ void loop() {
      ntp_rtc_run();
    #endif 
    
-  
    player_run();
    //gpiod_rotary_run();
    gpiod_keys_run();
@@ -208,7 +207,7 @@ void loop() {
    
   if (global_heartbeat_counter%100000 == 0)   
     task_heartbeat();
-     
+   
 }
 
 
