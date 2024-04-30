@@ -5,7 +5,7 @@
 
 #define USE_NTP_CLOCK_SYNC
 
-//#define USE_WATCHDOG
+#define USE_WATCHDOG
 
 //#define USE_SDCARD
 #define USE_LITTLEFS
