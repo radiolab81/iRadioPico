@@ -193,11 +193,6 @@ void loop() {
      ntp_rtc_run();
    #endif 
    
-  #ifdef USE_LITTLEFS
-    #ifdef USE_AUTO_SAVE
-        auto_save_run();
-    #endif
-  #endif
   
    player_run();
    //gpiod_rotary_run();
@@ -205,8 +200,14 @@ void loop() {
    //gpiod_gesture_run();
    //gpiod_potentiometer_run();
 
-   if (global_heartbeat_counter%100000 == 0)   
-     task_heartbeat();
+   #ifdef USE_LITTLEFS
+    #ifdef USE_AUTO_SAVE
+       auto_save_run();
+    #endif
+  #endif
+   
+  if (global_heartbeat_counter%100000 == 0)   
+    task_heartbeat();
      
 }
 
