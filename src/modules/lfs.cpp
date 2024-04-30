@@ -103,6 +103,8 @@ int writeRadioSettingsLittleFS() {
   }
   
   fd.printf("actual_channel_or_file_ID=%i\n",actual_channel_or_file_ID);
+  fd.printf("volume_L=%i\n",volume_L);
+  fd.printf("volume_R=%i\n",volume_R);
   fd.close();
   SERIAL_PORT.println("LITTLEFS: radio settings written to file");
   
@@ -132,6 +134,16 @@ int readRadioSettingsLittleFS() {
      if ( line.indexOf("actual_channel_or_file_ID=") != -1) {
        String data = line.substring(line.indexOf("ID=")+3);
        actual_channel_or_file_ID = data.toInt();
+     } 
+     
+     if ( line.indexOf("volume_L=") != -1) {
+       String data = line.substring(line.indexOf("L=")+2);
+       volume_L = data.toInt();
+     } 
+     
+     if ( line.indexOf("volume_R=") != -1) {
+       String data = line.substring(line.indexOf("R=")+2);
+       volume_R = data.toInt();
      } 
      
   } //  while (fd.available()) {
