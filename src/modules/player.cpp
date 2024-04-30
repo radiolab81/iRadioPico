@@ -23,7 +23,6 @@
 	HTTPClient http;
 	WiFiClient *stream = NULL;
 	
-	uint8_t volume_L, volume_R;
 	uint16_t pcm_value_left = 0, pcm_value_right = 0;
 	
 	#ifdef USE_VLSI_VSDSP_VU_METER
@@ -146,10 +145,10 @@ void player_init() {
    
    #ifdef USE_VS1053_DECODER
 		
-	if (!VS1053Dekoder.begin()) { // initialisiere VS1053-Dekoder
-     		SERIAL_PORT.println("PLAYER: no VS1053-DSP detected");
-     		while (1) delay(1000);
-  	  }			
+	   if (!VS1053Dekoder.begin()) { // initialisiere VS1053-Dekoder
+     	     SERIAL_PORT.println("PLAYER: no VS1053-DSP detected");
+     	     while (1) delay(1000);
+  	   }			
 
    	   SERIAL_PORT.println("PLAYER: VS1053-DSP found");
 	   
@@ -169,12 +168,13 @@ void player_init() {
    	   volume_L = 10, volume_R = 10;   	   
 	
 	      
-	#ifdef USE_LITTLEFS
-         #ifdef USE_AUTO_SAVE
-            readRadioSettingsLittleFS();  // actual_channel_or_file_ID, volume_L/R ... overwritten by settings.txt 
-         #endif
-       #endif
-       VS1053Dekoder.setVolume(volume_L, volume_R);
+	   #ifdef USE_LITTLEFS
+             #ifdef USE_AUTO_SAVE
+               readRadioSettingsLittleFS();  // actual_channel_or_file_ID, volume_L/R ... overwritten by settings.txt 
+             #endif
+           #endif
+	
+           VS1053Dekoder.setVolume(volume_L, volume_R);
 	   create_audioplayer_pipeline(actual_channel_or_file_ID);
 	   
    #endif
