@@ -15,8 +15,8 @@
 
 #include "src/modules/player.h"
 
-//#include "src/modules/gpiod_rotary.h"
-#include "src/modules/gpiod_keys.h"
+#include "src/modules/gpiod_rotary.h"
+//#include "src/modules/gpiod_keys.h"
 //#include "src/modules/gesture/gpiod_gesture.h"
 //#include "src/modules/gpiod_potentiometer.h"
 
@@ -25,11 +25,13 @@
 //#include "src/modules/display/Arduino_GFX_st7735/displayd_st7735.h"
 //#include "src/modules/display/baby_metz/baby_metz.h"
 //#include "src/modules/display/Arduino_GFX_ILI9341/displayd_ILI9341.h"
+
 //#include "src/modules/display/ClockRadio/displayd_clockradio.h"
-//#include "src/modules/display/ClockRadio/gpiod_clockradio.h"
+//#include "src/modules/display/ClockRadio/httpd_clockradio.h"
 
 
-#include "src/modules/httpd.h"
+//#include "src/modules/httpd.h"
+
 #include "src/modules/ntp_rtc.h"
 #include "hardware/rtc.h"
 
@@ -162,26 +164,24 @@ void setup() {
           }
           SERIAL_PORT.printf("\nConnected to WiFi at %s\n", WiFi.localIP().toString().c_str());
        }
-  #endif //   #ifdef USE_WIFI
+   #endif //   #ifdef USE_WIFI
 
-  #ifdef USE_NTP_CLOCK_SYNC
-    ntp_rtc_init();
-  #endif 
+   #ifdef USE_NTP_CLOCK_SYNC
+     ntp_rtc_init();
+   #endif 
 
-  #ifdef USE_LITTLEFS
-    #ifdef USE_AUTO_SAVE
+   #ifdef USE_LITTLEFS
+     #ifdef USE_AUTO_SAVE
         auto_save_init();
-    #endif
-  #endif
+     #endif
+   #endif
   
-  // START (your own) TASKs: PLAYER, DISPLAYD, GPIOD, ... on cpu0
-  player_init();
-  //gpiod_rotary_init(); 
-  gpiod_keys_init();
-  //gpiod_gesture_init(); 
-  //gpiod_potentiometer_init();
-  //gpiod_clockradio_init();
-  
+   // START (your own) TASKs: PLAYER, DISPLAYD, GPIOD, ... on cpu0
+   player_init(); // will also call readRadioSettingsLittleFS within USE_VS1053_DECODER, so no need to do this separately
+   gpiod_rotary_init(); 
+   //gpiod_keys_init();
+   //gpiod_gesture_init(); 
+   //gpiod_potentiometer_init();
 }
 
 
@@ -196,20 +196,19 @@ void loop() {
    #endif 
    
    player_run();
-   //gpiod_rotary_run();
-   gpiod_keys_run();
+   gpiod_rotary_run();
+   //gpiod_keys_run();
    //gpiod_gesture_run();
    //gpiod_potentiometer_run();
-   //gpiod_clockradio_run();
 
    #ifdef USE_LITTLEFS
-    #ifdef USE_AUTO_SAVE
-       auto_save_run();
-    #endif
-  #endif
+     #ifdef USE_AUTO_SAVE
+        auto_save_run();
+     #endif
+   #endif
    
-  if (global_heartbeat_counter%100000 == 0)   
-    task_heartbeat();
+   if (global_heartbeat_counter%100000 == 0)   
+     task_heartbeat();
    
 }
 
@@ -230,7 +229,6 @@ void setup1() {
   //displayd_clockradio_init();
 
   //httpd_init();
-
 }
 
 //********************************************************************
@@ -246,10 +244,10 @@ void loop1() {
   //displayd_clockradio_run();
 
   //httpd_run();
-
+ 
   global_heartbeat_counter++;
   
   if (global_heartbeat_counter%100000 == 0)
-     task_heartbeat();
+    task_heartbeat();
   
 }
