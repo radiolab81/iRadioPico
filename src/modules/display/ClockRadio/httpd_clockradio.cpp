@@ -16,7 +16,7 @@ void handleRootClockRadio() {
       
   if ( server.argName(0).compareTo("command") == 0 ) {
     if (server.arg(0).compareTo("Next") == 0) {
-   	  next_station();
+      next_station();
     }
        
     if (server.arg(0).compareTo("Prev") == 0) {
@@ -183,11 +183,9 @@ function getData() { \
 </html> \
 ");
 
-
    server.send(200, "text/html", HTML);
    free(HTML);
 }
-
 
 
 void handleAlarmClockRadio() {
@@ -195,7 +193,6 @@ void handleAlarmClockRadio() {
   if (HTML==NULL) 
    return;
 
-      
   if ( server.argName(0).compareTo("enabled_alarm1") == 0 ) {
     if (server.arg(0).compareTo("true") == 0) {
       if (  server.argName(1).compareTo("save_alarms") == 0) {
@@ -308,7 +305,6 @@ strcat(HTML,"</center> \
 </body> \
 </html> \
 ");
-
 
    server.send(200, "text/html", HTML);
    free(HTML);   
