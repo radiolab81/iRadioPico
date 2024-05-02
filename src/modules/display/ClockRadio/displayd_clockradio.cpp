@@ -10,6 +10,7 @@
 #include "pico/util/datetime.h"
 
 #include "mode_switcher.h"
+#include "alarmd.h"
 
 #define PIN_DC_A0 21
 #define PIN_RST 20
@@ -75,7 +76,7 @@ void displayd_clockradio_init() {
     	/*:Arduino_ILI9341(Arduino_DataBus *bus, int8_t rst, uint8_t r, bool ips)
     	: Arduino_TFT(bus, rst, r, ips, ILI9341_TFTWIDTH, ILI9341_TFTHEIGHT, 0, 0, 0, 0)*/
    	if (bus != NULL) {
-   	  gfx = new Arduino_ILI9341(bus, PIN_RST, 3, false);
+   	  gfx =  new Arduino_ILI9341(bus, PIN_RST, 3, false);
    	} else {
    	  SERIAL_PORT.println("DISPLAYD: ILI9341 bus failed");
    	  exit(-1);
@@ -104,6 +105,7 @@ void displayd_clockradio_init() {
 	}
 	
 	mode_switcher_init();
+	alarmd_init();
 }
 
 
@@ -112,6 +114,7 @@ void displayd_clockradio_run() {  /* see great Arduino_GFX lib doc for all graph
 	if (millis()-last_call_time > FPS_SYNC_TIME) {
 	
 	    mode_switcher_run();
+	    alarmd_run();
 		
 	    if (radiomode == INTERNETRADIO) {
 	      // backlight pin on ? 
