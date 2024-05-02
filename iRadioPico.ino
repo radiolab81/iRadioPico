@@ -213,9 +213,6 @@ void loop() {
 }
 
 
-
-
-
 //********************************************************************
 // thats our "rc.local" to start all services we need on cpu_core_1
 // Att: network related stuff (ETH, WiFi libs) works only on core 0
