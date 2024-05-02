@@ -58,4 +58,11 @@ extern unsigned int volume_L, volume_R;
 enum RadioMode { STANDBY, INTERNETRADIO, FMTUNER };
 extern RadioMode radiomode;
 
+
+#include "hardware/rtc.h"
+
+enum AlarmStatus { ALARM_DISABLED, ALARM_ENABLED };
+extern AlarmStatus alarm1_status;
+extern datetime_t alarm1; // { .year  = -1, .month = -1, .day   = -1, .dotw  = -1, .hour  = -1, .min   = -1, .sec   = -1  };
+
 #endif

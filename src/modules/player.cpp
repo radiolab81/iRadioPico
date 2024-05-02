@@ -172,11 +172,13 @@ void player_init() {
              #ifdef USE_AUTO_SAVE
                readRadioSettingsLittleFS();  // actual_channel_or_file_ID, volume_L/R ... overwritten by settings.txt 
              #endif
-           #endif
+       #endif
 	
-           VS1053Dekoder.setVolume(volume_L, volume_R);
-	   create_audioplayer_pipeline(actual_channel_or_file_ID);
+       VS1053Dekoder.setVolume(volume_L, volume_R);
 	   
+       if (radiomode == INTERNETRADIO)
+	     create_audioplayer_pipeline(actual_channel_or_file_ID);
+	         
    #endif
    
    
@@ -215,17 +217,17 @@ void player() {
 void playerFillBufferTask()
 {
      #ifdef USE_VS1053_DECODER
-	if (state == RUNNING) {
-  	  if (stream!=NULL) {
-     	    if (stream->available() > 32) {
+	    if (state == RUNNING) {
+  	      if (stream!=NULL) {
+        if (stream->available() > 32) {
 	      if (!queue.isFull()) {
-                Buffer32Byte *decoded_audio = new Buffer32Byte();
-	 	stream->read(decoded_audio->data, 32);
-   		queue.push(decoded_audio);
+            Buffer32Byte *decoded_audio = new Buffer32Byte();
+	 	    stream->read(decoded_audio->data, 32);
+   		    queue.push(decoded_audio);
 	      }
-      	    }	 
-	  } 
-        }
+        }	 
+	   } 
+     }
      #endif
   
      #ifdef USE_INTERNAL_CODEC_WITH_CUSTOM_LIB

@@ -12,3 +12,6 @@ char password[64];
 unsigned int volume_L, volume_R;
 
 RadioMode radiomode = INTERNETRADIO;
+
+AlarmStatus alarm1_status = ALARM_DISABLED;
+datetime_t alarm1 { .year  = -1, .month = -1, .day   = -1, .dotw  = -1, .hour  = -1, .min   = -1, .sec   = -1  };

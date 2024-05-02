@@ -20,7 +20,7 @@ void auto_save_run() {
      // check if somethk changed since last run
      if ((actual_channel_or_file_ID != last_actual_channel_or_file_ID) ||
      	 (volume_L != last_volume_L ) ||
-     	 (volume_R != last_volume_R )) {
+     	 (volume_R != last_volume_R ) ) {
        writeRadioSettingsLittleFS();
      }
    
