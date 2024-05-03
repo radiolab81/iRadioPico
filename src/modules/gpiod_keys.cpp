@@ -1,8 +1,8 @@
 #include "player.h"
 #include <Arduino.h>
 
-#define KEY_A_PIN 28
-#define KEY_B_PIN 27
+#define KEY_CHANNEL_UP_PIN 28
+#define KEY_CHANNEL_DOWN_PIN 27
 
 #define DEBOUNCE_TIME_KEYS 250
 
@@ -11,38 +11,31 @@ enum _result { NONE, CH_UP, CH_DOWN };
 static unsigned long last_interrupt_time = 0;
 static _result result = NONE;
 
-void isr_keys() {
-  uint32_t flags = save_and_disable_interrupts();
-  //hw_clear_bits(&(iobank0_hw->proc0_irq_ctrl.inte[KEY_.... / 8]), 0b1111 << (KEY_.... % 8 )*4u );
-   
-  //SERIAL.println("in isr");
+void handle_keys() {
+  if ( (digitalRead(KEY_CHANNEL_UP_PIN)==0) || (digitalRead(KEY_CHANNEL_DOWN_PIN)==0) )
   if (millis()-last_interrupt_time>DEBOUNCE_TIME_KEYS) {
   
-    if (digitalRead(KEY_A_PIN)==0){
+    if (digitalRead(KEY_CHANNEL_UP_PIN)==0){
 	  result = CH_UP;
     }
       
-    if (digitalRead(KEY_B_PIN)==0){
+    if (digitalRead(KEY_CHANNEL_DOWN_PIN)==0){
       result = CH_DOWN;
     }
-      
+
     last_interrupt_time=millis();
   } // if (millis()-last_interrupt_time>DEBOUNCE_TIME_KEYS){
-  
-  restore_interrupts(flags); 
-  //hw_set_bits(&(iobank0_hw->proc0_irq_ctrl.inte[KEY_.... / 8]), 0b0100 << (KEY_.... % 8 )*4u );
 }
 
 
 void gpiod_keys_init() {
   // put your setup code here, to run once:
-  pinMode(KEY_A_PIN,INPUT_PULLUP);
-  pinMode(KEY_B_PIN,INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(KEY_A_PIN), isr_keys, FALLING);
-  attachInterrupt(digitalPinToInterrupt(KEY_B_PIN), isr_keys, FALLING);
+  pinMode(KEY_CHANNEL_UP_PIN,INPUT_PULLUP);
+  pinMode(KEY_CHANNEL_DOWN_PIN,INPUT_PULLUP);
 }
 
 void gpiod_keys_run() {
+  handle_keys();
   if (result == CH_UP)
     next_station();
     
