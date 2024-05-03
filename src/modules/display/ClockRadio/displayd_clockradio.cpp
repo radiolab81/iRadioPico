@@ -158,8 +158,7 @@ void displayd_clockradio_run() {  /* see great Arduino_GFX lib doc for all graph
 		  
 	    	//canvas->print(info.cur_url_playing+cur_url_scroll_pos);
 		canvas->printf("%.*s", 22, info.cur_url_playing+cur_url_scroll_pos);
-		    
-		   
+	    		   
 	        canvas->setTextColor(WHITE);
 	    	
 	        #ifdef USE_INTERNAL_VU_METER
@@ -178,19 +177,18 @@ void displayd_clockradio_run() {  /* see great Arduino_GFX lib doc for all graph
 		   canvas->fillRect(25, 179, 15, -info.vsdsp_vu_left, GREEN);
 		    	
 		   canvas->drawRect(54, 180,  17, -97, WHITE);
-		   canvas->fillRect(55, 179, 15, -info.vsdsp_vu_right, GREEN);
-		    	
+		   canvas->fillRect(55, 179, 15, -info.vsdsp_vu_right, GREEN);   	
 		#endif
 		    
 		    
 		if (rtc_running()) {
 		  if (millis()-last_ask_for_time > ASK_FOR_TIME_DELAY_MS) {
-		    rtc_get_datetime(&date_time);
+	            rtc_get_datetime(&date_time);
               	    last_ask_for_time = millis();
 		  }	     
 		      
-	         canvas->setCursor(0,5);
-                 canvas->printf("%0.2i:%0.2i %i\\%i\\%i\n",date_time.hour, date_time.min, date_time.month, date_time.day, date_time.year); 
+	          canvas->setCursor(0,5);
+                  canvas->printf("%0.2i:%0.2i %i\\%i\\%i\n",date_time.hour, date_time.min, date_time.month, date_time.day, date_time.year); 
 	        }
 
                 canvas->setTextColor(WHITE);
@@ -202,13 +200,35 @@ void displayd_clockradio_run() {  /* see great Arduino_GFX lib doc for all graph
 	      } // if (canvas!=NULL) {
 	     } // if (radiomode == INTERNETRADIO) {
 	    
-	    
 	    if (radiomode == STANDBY) {
-	      // maybe backlight pin off
-	      canvas->fillScreen(BLACK);
-	      canvas->flush();
+	      if (canvas != NULL) {
+	        // maybe backlight pin off or lower pwm brightness
+	        canvas->fillScreen(BLACK);
+	        canvas->setTextSize(10);
+		canvas->setTextColor(DARKGREY);
+		if (rtc_running()) {
+		  if (millis()-last_ask_for_time > ASK_FOR_TIME_DELAY_MS) {
+  	    	    rtc_get_datetime(&date_time);
+              	    last_ask_for_time = millis();
+		  }	     
+		      
+	          canvas->setCursor(12,75);
+                  canvas->printf("%0.2i:%0.2i",date_time.hour, date_time.min); 
+                  canvas->setTextSize(3);
+                  canvas->setCursor(67,160);
+                  canvas->printf("%0.2i\\%0.2i\\%i\n", date_time.month, date_time.day, date_time.year);  
+	        } // if (rtc_running()) {
+		  
+		if (alarm1_status == ALARM_ENABLED) {
+		  canvas->setTextSize(2);
+		  canvas->setCursor(120,10);
+		  canvas->printf("(ALARM ON) %0.2i:%0.2i",alarm1.hour, alarm1.min);
+	        }
+		    
+	        canvas->flush();
+	      } // if (canvas != NULL) {
 	    } //   if (radiomode == STANDBY) {
 	    
 	    last_call_time = millis();
-	}	// 	if (millis()-last_call_time > FPS_SYNC_TIME) {
+	} // if (millis()-last_call_time > FPS_SYNC_TIME) {
 }
