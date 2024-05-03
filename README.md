@@ -67,13 +67,22 @@ Democode vorhanden für:
 - weitere zahlreiche Controller über Arduino_GFX lib
   siehe https://github.com/moononournation/Arduino_GFX#currently-supported-display-wiki
 
-![ili9341](https://github.com/BM45/iRadioPico/blob/main/pics4www/vu.jpg)
+![ili9341](https://github.com/BM45/iRadioPico/blob/main/pics4www/vu.jpg) 
 
-  Durch die Einbettung des iRadioPico ins Arduino-Ökosystems stehen viele weitere Bibliotheken zur Ansteuerung von Displays zur Verfügung.
+*displayd mit aktivierter VU-Meter Funktion des VS1053*
+
+Durch die Einbettung des iRadioPico ins Arduino-Ökosystems stehen viele weitere Bibliotheken zur Ansteuerung von Displays zur Verfügung.
 
 Das besonderes Highlight, die Simulation photorealistischer Nachbildungen von Senderskalen alter Radios, ist auch beim iRadioPico vertreten.
 
 ![sim](https://github.com/BM45/iRadioPico/blob/main/pics4www/babymetz.jpg)
+
+Durch den Einsatz der im RP2040 integrierten RTC (Echtzeituhr) sind auch Umsetzungen als Radiowecker denkbar. Die RTC wird dabei über einen NTP-Server synchronisiert, Weckalarme können das Radio aus dem Standby-Modus holen.
+
+*Bilder zeigen die im iRadioPico enthaltende Demoanwendung ClockRadio mit NTP Syncronisation, Standby-Screen und Weckerfunktion*
+![clockradio1](https://github.com/BM45/iRadioPico/blob/main/pics4www/standbyscreen.jpg) 
+![clockradio2](https://github.com/BM45/iRadioPico/blob/main/pics4www/httpd_alarms.jpg)
+
 
 ## Unterstützte Audio-DACs:
 
