@@ -79,7 +79,7 @@ Das besonderes Highlight, die Simulation photorealistischer Nachbildungen von Se
 
 Durch den Einsatz der im RP2040 integrierten RTC (Echtzeituhr) sind auch Umsetzungen als Radiowecker denkbar. Die RTC wird dabei über einen NTP-Server synchronisiert, Weckalarme können das Radio aus dem Standby-Modus holen.
 
-*Bilder zeigen die im iRadioPico enthaltende Demoanwendung ClockRadio mit NTP Syncronisation, Standby-Screen und Weckerfunktion*
+*Im iRadioPico enthaltende Demoanwendung ClockRadio mit NTP Syncronisation, Standby-Screen und Weckerfunktion*
 ![clockradio1](https://github.com/BM45/iRadioPico/blob/main/pics4www/standbyscreen.jpg) 
 ![clockradio2](https://github.com/BM45/iRadioPico/blob/main/pics4www/httpd_alarms.jpg)
 
