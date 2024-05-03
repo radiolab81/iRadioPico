@@ -20,7 +20,7 @@ static void handle_clockradio_keys() {
   if (millis()-last_interrupt_time>DEBOUNCE_TIME_KEYS) {
   
     if (digitalRead(KEY_CHANNEL_UP_PIN)==0){
-	  result = CH_UP;
+      result = CH_UP;
     }
       
     if (digitalRead(KEY_CHANNEL_DOWN_PIN)==0){
