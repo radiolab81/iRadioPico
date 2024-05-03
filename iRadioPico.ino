@@ -28,7 +28,7 @@
 
 //#include "src/modules/display/ClockRadio/displayd_clockradio.h"
 //#include "src/modules/display/ClockRadio/httpd_clockradio.h"
-
+//#include "src/modules/display/ClockRadio/gpiod_clockradio.h"
 
 //#include "src/modules/httpd.h"
 
@@ -182,6 +182,7 @@ void setup() {
    //gpiod_keys_init();
    //gpiod_gesture_init(); 
    //gpiod_potentiometer_init();
+   //gpiod_clockradio_init();
 }
 
 
@@ -200,6 +201,7 @@ void loop() {
    //gpiod_keys_run();
    //gpiod_gesture_run();
    //gpiod_potentiometer_run();
+   //gpiod_clockradio_run();
 
    #ifdef USE_LITTLEFS
      #ifdef USE_AUTO_SAVE
@@ -226,6 +228,7 @@ void setup1() {
   //displayd_clockradio_init();
 
   //httpd_init();
+  //httpd_clockradio_init(); 
 }
 
 //********************************************************************
@@ -241,7 +244,8 @@ void loop1() {
   //displayd_clockradio_run();
 
   //httpd_run();
- 
+  //httpd_clockradio_run();
+   
   global_heartbeat_counter++;
   
   if (global_heartbeat_counter%100000 == 0)
