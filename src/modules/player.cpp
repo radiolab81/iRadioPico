@@ -64,7 +64,7 @@ void terminate_audioplayer_pipeline() {
   	stream = NULL;
   	// clear buffer mem
   	while (!queue.isEmpty()) {
-    	  delete(queue.pop());
+          delete(queue.pop());
   	}
   	 
     //http.end(); -> same issue like https://github.com/espressif/arduino-esp32/issues/828
@@ -146,8 +146,8 @@ void player_init() {
    #ifdef USE_VS1053_DECODER
 		
 	   if (!VS1053Dekoder.begin()) { // initialisiere VS1053-Dekoder
-     	     SERIAL_PORT.println("PLAYER: no VS1053-DSP detected");
-     	     while (1) delay(1000);
+     	 SERIAL_PORT.println("PLAYER: no VS1053-DSP detected");
+     	 while (1) delay(1000);
   	   }			
 
    	   SERIAL_PORT.println("PLAYER: VS1053-DSP found");
@@ -169,14 +169,14 @@ void player_init() {
 	
 	      
 	   #ifdef USE_LITTLEFS
-             #ifdef USE_AUTO_SAVE
-               readRadioSettingsLittleFS();  // actual_channel_or_file_ID, volume_L/R ... overwritten by settings.txt 
-             #endif
-           #endif
+          #ifdef USE_AUTO_SAVE
+             readRadioSettingsLittleFS();  // actual_channel_or_file_ID, volume_L/R ... overwritten by settings.txt 
+          #endif
+       #endif
 	
-           VS1053Dekoder.setVolume(volume_L, volume_R);
+       VS1053Dekoder.setVolume(volume_L, volume_R);
 	   
-           if (radiomode == INTERNETRADIO)
+       if (radiomode == INTERNETRADIO)
 	     create_audioplayer_pipeline(actual_channel_or_file_ID);
 	         
    #endif
@@ -194,16 +194,16 @@ void player() {
 
   	#ifdef USE_VS1053_DECODER
   
-    	   float fuellstand = (queue.count() / BUF_SIZE) * 99;
-    	   //SERIAL_PORT.println(fuellstand);
+       float fuellstand = (queue.count() / BUF_SIZE) * 99;
+       //SERIAL_PORT.println(fuellstand);
             
-  	    if (VS1053Dekoder.readyForData()) {
-   	      if (!queue.isEmpty()) {
-     		Buffer32Byte *decoded_audio = queue.pop();
-     		VS1053Dekoder.playData(decoded_audio->data, 32);
-     		delete(decoded_audio);
-  	      } 
-   	    } 
+  	   if (VS1053Dekoder.readyForData()) {
+   	     if (!queue.isEmpty()) {
+     		Buffer32Byte *coded_audio = queue.pop();
+     		VS1053Dekoder.playData(coded_audio->data, 32);
+     		delete(coded_audio);
+  	     } 
+   	   } 
   			 
   	#endif
   	
@@ -218,15 +218,15 @@ void playerFillBufferTask()
 {
      #ifdef USE_VS1053_DECODER
         if (state == RUNNING) {
-  	  if (stream!=NULL) {
+          if (stream!=NULL) {
             if (stream->available() > 32) {
-	      if (!queue.isFull()) {
-                Buffer32Byte *decoded_audio = new Buffer32Byte();
-	 	stream->read(decoded_audio->data, 32);
-   		queue.push(decoded_audio);
-	      }
+              if (!queue.isFull()) {
+                Buffer32Byte *coded_audio = new Buffer32Byte();
+                stream->read(coded_audio->data, 32);
+                queue.push(coded_audio);
+              } 
             }	 
-	  } 
+          } 
         }
      #endif
   
@@ -391,8 +391,8 @@ PlayerInfo getPlayerInfo(void) {
    #endif
    
    #ifdef USE_VLSI_VSDSP_VU_METER
-      		info.vsdsp_vu_left = vsdsp_vu_left;
-      		info.vsdsp_vu_right = vsdsp_vu_right;
+        info.vsdsp_vu_left = vsdsp_vu_left;
+        info.vsdsp_vu_right = vsdsp_vu_right;
    #endif
    
    return info;
